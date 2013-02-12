@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZenCoding", "ZenCoding\ZenCoding.csproj", "{C8438DA3-0325-46EA-9D67-9736FBE2F871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZenCoding.Test", "ZenCoding.Test\ZenCoding.Test.csproj", "{9A00DF71-01DF-42BC-A57A-012DA00AF895}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://vstfdevdiv:8080/devdiv2
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ZenCoding.Test\\ZenCoding.Test.csproj
+		SccProjectName1 = ZenCoding.Test
+		SccLocalPath1 = ZenCoding.Test
+		SccProjectUniqueName2 = ZenCoding\\ZenCoding.csproj
+		SccProjectName2 = ZenCoding
+		SccLocalPath2 = ZenCoding
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8438DA3-0325-46EA-9D67-9736FBE2F871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8438DA3-0325-46EA-9D67-9736FBE2F871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8438DA3-0325-46EA-9D67-9736FBE2F871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8438DA3-0325-46EA-9D67-9736FBE2F871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A00DF71-01DF-42BC-A57A-012DA00AF895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A00DF71-01DF-42BC-A57A-012DA00AF895}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A00DF71-01DF-42BC-A57A-012DA00AF895}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A00DF71-01DF-42BC-A57A-012DA00AF895}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
