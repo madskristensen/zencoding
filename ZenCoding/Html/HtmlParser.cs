@@ -45,6 +45,53 @@ namespace ZenCoding
 
         public string Parse(string zenSyntax)
         {
+            int groupId = 0;
+            int groupIdx;
+            var resolvedGroups = new List<string>();
+            while ((groupIdx = zenSyntax.IndexOf('(')) != -1)
+            {
+                //Find the end of the group
+                int stackBase;
+                int i;
+                for (i = groupIdx + 1, stackBase = 1; i < zenSyntax.Length && stackBase != 0; ++i)
+                    switch (zenSyntax[i])
+                    {
+                        case '(':
+                            stackBase++;
+                            break;
+                        case ')':
+                            stackBase--;
+                            break;
+                    }
+
+                //Bad formatting (could not match the group ending)
+                if (stackBase != 0)
+                    return string.Empty;
+
+                //Remove the grouping chars and parse it recursively (enabling subgroups)
+                string group = zenSyntax.Substring(groupIdx, i - groupIdx);
+                string parsedGroup = Parse(group.Substring(1, group.Length - 2));
+
+                //Add the parsed group to a list for last composition
+                if (!resolvedGroups.Contains(parsedGroup))
+                    resolvedGroups.Add(parsedGroup);
+
+                //Replace the group with a "valid" element marked with the group id
+                zenSyntax = zenSyntax.Replace(group, "span.__group" + groupId++);
+            }
+
+            //If there are no more groups
+            string result = ParseGroup(zenSyntax);
+
+            //Place the parsed groups on their respective positions
+            for (--groupId; groupId >= 0; --groupId)
+                result = result.Replace(string.Format("<span class=\"__group{0}\"></span>", groupId), resolvedGroups[groupId]);
+
+            return result;
+        }
+
+        public string ParseGroup(string zenSyntax)
+        {
             if (!IsValid(zenSyntax))
                 return string.Empty;
 
