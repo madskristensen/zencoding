@@ -97,5 +97,14 @@ namespace ZenCoding.Test
 
             Assert.AreEqual(expected, result);
         }
+
+        [TestMethod]
+        public void AttributesQuoted()
+        {
+            string result = _parser.Parse("input[type='button']", ZenType.HTML);
+            string expected = "<input type=\"button\" value=\"\" />";
+
+            Assert.AreEqual(expected, result);
+        }
 }
 }
