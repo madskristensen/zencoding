@@ -304,7 +304,7 @@ namespace ZenCoding
                 foreach (string part in parts)
                 {
                     string[] sides = part.Split('=');
-                    element.Attributes[sides[0]] = sides.Length == 1 ? string.Empty : sides[1].Replace("\"", string.Empty).Replace("'", string.Empty);
+                    element.Attributes[sides[0]] = sides.Length == 1 ? string.Empty : sides[1].Trim('"', '\'');
                 }
             }
         }
