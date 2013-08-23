@@ -38,7 +38,7 @@ namespace ZenCoding.Test
         public void ShortcutChildren()
         {
             string result = _parser.Parse("input:search+div", ZenType.HTML);
-            string expected = "<input type=\"search\" value=\"\" id=\"\" /><div></div>";
+            string expected = "<input type=\"search\" value=\"\" id=\"\" />\r\n<div></div>";
 
             Assert.AreEqual(expected, result);
         }

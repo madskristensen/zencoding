@@ -58,7 +58,7 @@ namespace ZenCoding.Test
         public void PlusMap()
         {
             string result = _parser.Parse("map+", ZenType.HTML);
-            string expected = "<map><area shape=\"\" coords=\"\" href=\"\" alt=\"\"></area></map>";
+            string expected = "<map>\r\n<area shape=\"\" coords=\"\" href=\"\" alt=\"\"></area></map>";
 
             Assert.AreEqual(expected, result);
         }

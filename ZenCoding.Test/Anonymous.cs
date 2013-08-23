@@ -38,7 +38,7 @@ namespace ZenCoding.Test
         {
             string result = _parser.Parse("footer+#name.item", ZenType.HTML);
 
-            Assert.AreEqual("<footer></footer><div id=\"name\" class=\"item\"></div>", result);
+            Assert.AreEqual("<footer></footer><div id=\"name\" class=\"item\"></div>", result.Replace(Environment.NewLine, string.Empty));
         }
 
         [TestMethod]

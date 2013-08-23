@@ -17,10 +17,13 @@ namespace ZenCoding
 
         protected override void RenderBeginTag(HtmlTextWriter writer)
         {
+            //if (!(this.Parent is BlockHtmlControl))
+                writer.Write(Environment.NewLine);
+            
             base.RenderBeginTag(writer);
 
-            if (Controls.Count > 0)
-                writer.Write(Environment.NewLine);
+            //if (Controls.Count > 0)
+                //writer.Write(Environment.NewLine);
         }
     }
 }
