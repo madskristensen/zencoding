@@ -15,44 +15,64 @@ namespace ZenCoding
             this.Width = this.Height = 30;
             this.Category = "";
             this.Text = "";
-            this.IsGray = true;
+            this.IsGray = false;
 
-            string dimensions = "";
+            string dimensions = "", category = "", text = "";
             string[] parts;
 
             parts = loremPixelText.Split('-');
 
-            if (!String.IsNullOrEmpty(parts[1]))
+            try
             {
-                if (parts[1].Equals("g"))
+                if (parts.Length > 1)
                 {
-                    this.IsGray = true;
-                    dimensions = parts[2];
-                }
-                else
-                {
-                    dimensions = parts[1];
-                }
-
-                string[] components = ExtractNumbers(dimensions);
-
-                if (IsInteger(components[0]) && IsInteger(components[1]))
-                {
-                    this.Width = int.Parse(components[0]);
-                    this.Height = int.Parse(components[1]);
-                    if (!String.IsNullOrEmpty(parts[2]))
+                    if (parts[1].Equals("g"))
                     {
-                        if (_categories.Contains(parts[2]))
+                        this.IsGray = true;
+                        dimensions = parts[2];
+                    }
+                    else
+                    {
+                        dimensions = parts[1];
+                    }
+
+                    string[] components = ExtractNumbers(dimensions);
+
+                    if (IsInteger(components[0]) && IsInteger(components[1]))
+                    {
+                        this.Width = int.Parse(components[0]);
+                        this.Height = int.Parse(components[1]);
+
+                        if (parts.Length > 2)
                         {
-                            this.Category = parts[2];
-                            this.Text = !String.IsNullOrEmpty(parts[3]) ? parts[3] : "";
-                        }
-                        else
-                        {
-                            this.Text = parts[2];
+                            if (this.IsGray)
+                            {
+                                category = parts[3];
+                                if (parts.Length > 4)
+                                {
+                                    text = parts[4];
+                                }
+                            }
+                            else
+                            {
+                                category = parts[2];
+                                if (parts.Length > 3)
+                                {
+                                    text = parts[3];
+                                }
+                            }
+                            if (_categories.Contains(category))
+                            {
+                                this.Category = category;
+                                this.Text = text;
+                            }
                         }
                     }
                 }
+            }
+            catch
+            {
+
             }
 
             this.Width = this.Width % 1921;
@@ -73,12 +93,11 @@ namespace ZenCoding
             builder.Append(this.Width).Append("/").Append(this.Height).Append("/");
             if (!String.IsNullOrEmpty(this.Category))
             {
-                builder.Append(this.Category).Append("/");
-            }
-            builder.Append(randomInt).Append("/");
-            if (!String.IsNullOrEmpty(this.Text))
-            {
-                builder.Append(this.Text).Append("/");
+                builder.Append(this.Category).Append("/").Append(randomInt).Append("/");
+                if (!String.IsNullOrEmpty(this.Text))
+                {
+                    builder.Append(this.Text).Append("/");
+                }
             }
             return builder.ToString();
         }
