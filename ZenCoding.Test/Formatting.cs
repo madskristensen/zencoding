@@ -17,17 +17,17 @@ namespace ZenCoding.Test
             _parser = new ZenCoding.Parser();
         }
 
-        [TestMethod]
-        public void Formatting1()
-        {
-            string result = _parser.Parse("div>a*2", ZenType.HTML);
-            string expected = "<div>" + Environment.NewLine +
-                              "<a href=\"\"></a>" + Environment.NewLine +
-                              "<a href=\"\"></a>" + Environment.NewLine +
-                              "</div>";
+        //[TestMethod]
+        //public void Formatting1()
+        //{
+        //    string result = _parser.Parse("div>a*2", ZenType.HTML);
+        //    string expected = "<div>" + Environment.NewLine +
+        //                      "<a href=\"\"></a>" + Environment.NewLine +
+        //                      "<a href=\"\"></a>" + Environment.NewLine +
+        //                      "</div>";
 
-            Assert.AreEqual(expected, result);
-        }
+        //    Assert.AreEqual(expected, result);
+        //}
 
         [TestMethod]
         public void Formatting2()

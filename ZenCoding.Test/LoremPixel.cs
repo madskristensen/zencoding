@@ -18,7 +18,7 @@ namespace ZenCoding.Test
         public void LoremPixel1()
         {
             string result = _parser.Parse("pix", ZenType.HTML);
-            string expected = "http://lorempixel.com/30/30/";
+            string expected = "<img src=\"http://lorempixel.com/30/30/\" alt=\"\" />";
 
             Assert.AreEqual(expected, result);
         }
@@ -27,7 +27,7 @@ namespace ZenCoding.Test
         public void LoremPixel2()
         {
             string result = _parser.Parse("pix-g", ZenType.HTML);
-            string expected = "http://lorempixel.com/g/30/30/";
+            string expected = "<img src=\"http://lorempixel.com/g/30/30/\" alt=\"\" />";
 
             Assert.AreEqual(expected, result);
         }
@@ -39,8 +39,8 @@ namespace ZenCoding.Test
             string expectedStart = "http://lorempixel.com/120/1879/sports/";
             string expectedEnd = "/SomeRandomText/";
 
-            StringAssert.StartsWith(result, expectedStart);
-            StringAssert.EndsWith(result, expectedEnd);
+            StringAssert.Contains(result, expectedStart);
+            StringAssert.Contains(result, expectedEnd);
         }
 
         [TestMethod]
@@ -51,15 +51,15 @@ namespace ZenCoding.Test
             string expectedStart = "http://lorempixel.com/g/999/1920/animals/";
             string expectedEnd = "/SomeRandomText/";
 
-            StringAssert.StartsWith(result, expectedStart);
-            StringAssert.EndsWith(result, expectedEnd);
+            StringAssert.Contains(result, expectedStart);
+            StringAssert.Contains(result, expectedEnd);
         }
 
         [TestMethod]
         public void LoremPixel5()
         {
             string result = _parser.Parse("pix-20000x3599-SomeRandomText", ZenType.HTML);
-            string expected = "http://lorempixel.com/790/1678/"; // the allowed bound is 0-1920
+            string expected = "<img src=\"http://lorempixel.com/790/1678/\" alt=\"\" />"; // the allowed bound is 0-1920
             
             Assert.AreEqual(expected, result);
         }

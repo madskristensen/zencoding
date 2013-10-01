@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Web.UI.HtmlControls;
 
 namespace ZenCoding
 {
-    public class LoremPixel : EmptyHtmlControl
+    public class LoremPixel : HtmlImage
     {
         private static readonly string _url = "http://lorempixel.com/";
         private static readonly string[] _categories = new string[] { "abstract", "animals", "business", "cats", "city", "food", "nightlife", "fashion", "people", "nature", "sports", "technics", "transport" };
@@ -78,7 +79,7 @@ namespace ZenCoding
             this.Width = this.Width % 1921;
             this.Height = this.Height % 1921;
 
-            this.InnerText = GetLoremPixelPath();
+            this.Src = GetLoremPixelPath();
         }
 
         private string GetLoremPixelPath()
