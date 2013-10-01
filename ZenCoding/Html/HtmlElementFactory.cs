@@ -62,6 +62,10 @@ namespace ZenCoding
             {
                 return new LoremControl(tagName);
             }
+            else if (tagName.StartsWith("pix", System.StringComparison.Ordinal))
+            {
+                return new LoremPixel(tagName);
+            }
 
             switch (tagName)
             {
