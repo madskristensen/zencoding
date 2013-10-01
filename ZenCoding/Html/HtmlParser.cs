@@ -153,6 +153,7 @@ namespace ZenCoding
                 if (firstElement.Length > 0 &&
                     !ValidElements.List.Contains(firstElement) &&
                     !firstElement.StartsWith("lorem") &&
+                    !firstElement.StartsWith("pix") &&
                     firstElement != "h$")
 
                     return false;
@@ -341,7 +342,7 @@ namespace ZenCoding
         {
             int index = part.IndexOf('*');
             int count = 1;
-            
+
             if (index > -1 && part.Length > index && !char.IsNumber(part[index + 1]))
                 index = -1;
 

@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Html\BlockHtmlControl.cs" />
     <Compile Include="Html\LoremControl.cs" />
+    <Compile Include="Html\LoremPixel.cs" />
     <Compile Include="Html\SelfClosingHtmlControl.cs" />
     <Compile Include="Html\EmptyHtmlControl.cs" />
     <Compile Include="Html\CustomHtmlInput.cs" />
