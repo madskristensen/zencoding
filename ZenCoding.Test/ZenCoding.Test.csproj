@@ -62,6 +62,7 @@
     <Compile Include="Formatting.cs" />
     <Compile Include="Grouping.cs" />
     <Compile Include="InnerText.cs" />
+    <Compile Include="LoremPixel.cs" />
     <Compile Include="Plus.cs" />
     <Compile Include="Shortcut\Shortcut.cs" />
     <Compile Include="Validate.cs" />
