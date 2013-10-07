@@ -12,8 +12,7 @@ namespace ZenCoding
 
         public LoremPixel(string loremPixelText)
         {
-
-            this.Width = this.Height = 30;
+            this.AssetWidth = this.AssetHeight = 30;
             this.Category = "";
             this.Text = "";
             this.IsGray = false;
@@ -41,8 +40,8 @@ namespace ZenCoding
 
                     if (IsInteger(components[0]) && IsInteger(components[1]))
                     {
-                        this.Width = int.Parse(components[0]);
-                        this.Height = int.Parse(components[1]);
+                        this.AssetWidth = int.Parse(components[0]);
+                        this.AssetHeight = int.Parse(components[1]);
 
                         if (parts.Length > 2)
                         {
@@ -76,8 +75,8 @@ namespace ZenCoding
 
             }
 
-            this.Width = this.Width % 1921;
-            this.Height = this.Height % 1921;
+            this.AssetWidth = this.AssetWidth % 1921;
+            this.AssetHeight = this.AssetHeight % 1921;
 
             this.Src = GetLoremPixelPath();
         }
@@ -91,7 +90,7 @@ namespace ZenCoding
             {
                 builder.Append("g/");
             }
-            builder.Append(this.Width).Append("/").Append(this.Height).Append("/");
+            builder.Append(this.AssetWidth).Append("/").Append(this.AssetHeight).Append("/");
             if (!String.IsNullOrEmpty(this.Category))
             {
                 builder.Append(this.Category).Append("/").Append(randomInt).Append("/");
@@ -103,9 +102,9 @@ namespace ZenCoding
             return builder.ToString();
         }
 
-        public int Width { get; set; }
+        public int AssetWidth { get; set; }
 
-        public int Height { get; set; }
+        public int AssetHeight { get; set; }
 
         public string Category { get; set; }
 
