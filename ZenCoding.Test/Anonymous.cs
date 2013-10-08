@@ -1,8 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Text;
-using P = ZenCoding.Parser;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ZenCoding.Test
 {

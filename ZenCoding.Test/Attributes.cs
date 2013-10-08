@@ -1,8 +1,4 @@
-﻿
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ZenCoding.Test
 {
@@ -25,7 +21,7 @@ namespace ZenCoding.Test
 
             Assert.AreEqual(expected, result);
         }
-        
+
         [TestMethod]
         public void Attributes2()
         {
@@ -106,5 +102,14 @@ namespace ZenCoding.Test
 
             Assert.AreEqual(expected, result);
         }
-}
+
+        [TestMethod]
+        public void AttributesCrazyQuotesTest()
+        {
+            string result = _parser.Parse("p[title='Single quotes within single quotes: and this statement's ending with apostrophe'' data-foo=\"\"bar\" one\"]", ZenType.HTML);
+            string expected = "<p title=\"Single quotes within single quotes: and this statement&#39;s ending with apostrophe&#39;\" data-foo=\"&quot;bar&quot; one\"></p>";
+
+            Assert.AreEqual(expected, result);
+        }
+    }
 }

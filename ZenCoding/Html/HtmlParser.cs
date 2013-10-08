@@ -289,13 +289,17 @@ namespace ZenCoding
             if (start > -1 && end > start)
             {
                 string content = attribute.Substring(start + 1, end - start - 1);
-                List<string> parts = content.Split(' ').ToList();
-
+                List<string> parts = content.Trim().Split(' ').ToList();
+                
                 for (int i = parts.Count - 1; i > 0; i--)
                 {
                     string part = parts[i];
+                    int singleCount = part.Count(c => c == '\'');
+                    int doubleCount = part.Count(c => c == '"');
 
-                    if (part.Count(c => c == '"') == 1)
+                    if (((singleCount > 1 || doubleCount > 1) && !part.Contains("=")) || 
+                        ((doubleCount == 1) && part.EndsWith("\"")) || 
+                        ((singleCount == 1) && part.EndsWith("'")))
                     {
                         parts[i - 1] += " " + part;
                         parts.RemoveAt(i);
@@ -305,7 +309,25 @@ namespace ZenCoding
                 foreach (string part in parts)
                 {
                     string[] sides = part.Split('=');
-                    element.Attributes[sides[0]] = sides.Length == 1 ? string.Empty : sides[1].Trim('"', '\'');
+
+                    if (sides.Length == 1)
+                    {
+                        element.Attributes[sides[0]] = string.Empty;
+                    }
+                    else
+                    {
+                        sides[1] = sides[1].Trim();
+                        char firstChar = sides[1][0];
+                        char lastChar = sides[1][sides[1].Length - 1];
+                        if ((firstChar == '\'' || firstChar == '"') && firstChar == lastChar)
+                        {
+                            element.Attributes[sides[0]] = sides[1].Substring(1, sides[1].Length - 2);
+                        }
+                        else
+                        {
+                            element.Attributes[sides[0]] = sides[1];
+                        }
+                    }
                 }
             }
         }
