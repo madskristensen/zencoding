@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace ZenCoding.Test
 {
@@ -47,7 +46,7 @@ namespace ZenCoding.Test
         public void LoremPixel4()
         {
             string result = _parser.Parse("pix-g-999x1920-animals-SomeRandomText", ZenType.HTML);
-            
+
             string expectedStart = "http://lorempixel.com/g/999/1920/animals/";
             string expectedEnd = "/SomeRandomText/";
 
@@ -60,17 +59,18 @@ namespace ZenCoding.Test
         {
             string result = _parser.Parse("pix-20000x3599-SomeRandomText", ZenType.HTML);
             string expected = "<img src=\"http://lorempixel.com/790/1678/\" alt=\"\" />"; // the allowed bound is 0-1920
-            
+
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
         public void LoremPixelWithAttributes()
         {
-            string result = _parser.Parse("pix[alt='tags here' title='picture title' data-foo='bar']", ZenType.HTML);
-            string expected = "<img src=\"http://lorempixel.com/g/30/30/\" alt=\"tags here\" title=\"picture title\" data-foo=\"bar\" />";
+            string result = _parser.Parse("pix[alt=\"tag's here\" title=\"picture title\" data-foo=\"bar\"]", ZenType.HTML);
+            string expected = "<img src=\"http://lorempixel.com/30/30/\" alt=\"tag&#39;s here\" title=\"picture title\" data-foo=\"bar\" />";
 
             Assert.AreEqual(expected, result);
         }
+
     }
 }
