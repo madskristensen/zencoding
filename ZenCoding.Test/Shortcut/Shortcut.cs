@@ -74,7 +74,7 @@ namespace ZenCoding.Test
         public void ShortcutNested()
         {
             string result = _parser.Parse("form>input:t", ZenType.HTML);
-            string expected = "<form><input type=\"text\" value=\"\" id=\"\" /></form>";
+            string expected = "<form>" + Environment.NewLine + "<input type=\"text\" value=\"\" id=\"\" />" + Environment.NewLine + "</form>";
 
             Assert.AreEqual(expected, result);
         }
