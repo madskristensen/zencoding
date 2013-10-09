@@ -19,7 +19,7 @@ namespace ZenCoding.Test
         {
             string result = _parser.Parse("ul+", ZenType.HTML);
 
-            Assert.AreEqual("<ul><li></li></ul>", result);
+            Assert.AreEqual("<ul>" + Environment.NewLine + "<li></li>" + Environment.NewLine + "</ul>", result);
         }
 
         [TestMethod]
@@ -43,7 +43,7 @@ namespace ZenCoding.Test
         {
             string result = _parser.Parse("dl+", ZenType.HTML);
 
-            Assert.AreEqual("<dl><dt></dt><dd></dd></dl>", result);
+            Assert.AreEqual("<dl><dt></dt><dd></dd></dl>", result.Replace(Environment.NewLine, string.Empty));
         }
 
         [TestMethod]
@@ -51,14 +51,16 @@ namespace ZenCoding.Test
         {
             string result = _parser.Parse("select+", ZenType.HTML);
 
-            Assert.AreEqual("<select><option value=\"\"></option></select>", result);
+            Assert.AreEqual("<select><option value=\"\"></option></select>", result.Replace(Environment.NewLine, string.Empty));
         }
 
         [TestMethod]
         public void PlusMap()
         {
             string result = _parser.Parse("map+", ZenType.HTML);
-            string expected = "<map>\r\n<area shape=\"\" coords=\"\" href=\"\" alt=\"\"></area></map>";
+            string expected = "<map>" + Environment.NewLine +
+                              "<area shape=\"\" coords=\"\" href=\"\" alt=\"\"></area>" + Environment.NewLine +
+                              "</map>";
 
             Assert.AreEqual(expected, result);
         }
