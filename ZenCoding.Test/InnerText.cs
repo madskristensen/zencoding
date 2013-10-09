@@ -18,7 +18,9 @@ namespace ZenCoding.Test
         public void InnerTextSimple()
         {
             string result = _parser.Parse("a{Click here}", ZenType.HTML);
-            string expected = "<a href=\"\">Click here</a>";
+            string expected = "<a href=\"\">" + Environment.NewLine +
+                              "Click here" + Environment.NewLine + 
+                              "</a>";
 
             Assert.AreEqual(expected, result);
         }
@@ -27,7 +29,9 @@ namespace ZenCoding.Test
         public void InnerTextWithCounter()
         {
             string result = _parser.Parse("a[prop=val]{Click here $}", ZenType.HTML);
-            string expected = "<a href=\"\" prop=\"val\">Click here 1</a>";
+            string expected = "<a href=\"\" prop=\"val\">" + Environment.NewLine +
+                              "Click here 1" + Environment.NewLine + 
+                              "</a>";
 
             Assert.AreEqual(expected, result);
         }
@@ -36,9 +40,17 @@ namespace ZenCoding.Test
         public void InnerTextWithMultipleCounter()
         {
             string result = _parser.Parse("ul>li*2>a[prop=val][href=ost]{Click here $}", ZenType.HTML);
-            string expected = "<ul>" +
-                                "<li><a href=\"ost\" prop=\"val\">Click here 1</a></li>" + Environment.NewLine +
-                                "<li><a href=\"ost\" prop=\"val\">Click here 2</a></li>" + Environment.NewLine +
+            string expected = "<ul>" + Environment.NewLine +
+                                "<li>" + Environment.NewLine +
+                                "<a href=\"ost\" prop=\"val\">" + Environment.NewLine +
+                                "Click here 1" + Environment.NewLine + 
+                                "</a>" + Environment.NewLine +
+                                "</li>" + Environment.NewLine +
+                                "<li>" + Environment.NewLine +
+                                "<a href=\"ost\" prop=\"val\">" + Environment.NewLine +
+                                "Click here 2" + Environment.NewLine + 
+                                "</a>" + Environment.NewLine +
+                                "</li>" + Environment.NewLine +
                               "</ul>";                
 
             Assert.AreEqual(expected, result);

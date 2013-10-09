@@ -83,9 +83,13 @@ namespace ZenCoding
             //If there are no more groups
             string result = ParseGroup(zenSyntax);
 
+            // Remove temporary span's end tags
+            if (groupId - 1 >= 0)
+                result = result.Replace("</span>", String.Empty);
+
             //Place the parsed groups on their respective positions
             for (--groupId; groupId >= 0; --groupId)
-                result = result.Replace(string.Format("<span class=\"__group{0}\"></span>", groupId), resolvedGroups[groupId]);
+                result = result.Replace(string.Format("<span class=\"__group{0}\">", groupId), resolvedGroups[groupId]);
 
             return result;
         }
@@ -197,12 +201,6 @@ namespace ZenCoding
                             control.Controls.Add(clone);
                         }
 
-                        // Adds line breaks after each child when multiple children are inserted.
-                        if (count > 1)
-                        {
-                            control.Controls.Add(new LiteralControl(Environment.NewLine));
-                        }
-
                         list.Add(clone);
                     }
                 }
@@ -290,15 +288,15 @@ namespace ZenCoding
             {
                 string content = attribute.Substring(start + 1, end - start - 1);
                 List<string> parts = content.Trim().Split(' ').ToList();
-                
+
                 for (int i = parts.Count - 1; i > 0; i--)
                 {
                     string part = parts[i];
                     int singleCount = part.Count(c => c == '\'');
                     int doubleCount = part.Count(c => c == '"');
 
-                    if (((singleCount > 1 || doubleCount > 1) && !part.Contains("=")) || 
-                        ((doubleCount == 1) && part.EndsWith("\"")) || 
+                    if (((singleCount > 1 || doubleCount > 1) && !part.Contains("=")) ||
+                        ((doubleCount == 1) && part.EndsWith("\"")) ||
                         ((singleCount == 1) && part.EndsWith("'")))
                     {
                         parts[i - 1] += " " + part;
@@ -485,8 +483,49 @@ namespace ZenCoding
             using (XhtmlTextWriter hw = new XhtmlTextWriter(tw))
             {
                 ctrl.RenderControl(hw);
-                return sb.ToString().Trim();
+
+                return InjectNewLineInMarkup(sb);
             }
+        }
+
+        private static string InjectNewLineInMarkup(StringBuilder sb)
+        {
+            var htmlString = sb.ToString().Trim().Replace(Environment.NewLine, String.Empty);
+
+            // Replace newline feed before and after start tag
+            sb.Clear();
+            sb.Append(Environment.NewLine).Append("$1").Append(Environment.NewLine);
+
+            htmlString = Regex.Replace(htmlString, @"(<[^/][^>]*>)", sb.ToString());
+
+            // Replace newline feed before and after end tag
+            sb.Clear();
+            sb.Append(Environment.NewLine).Append("$1").Append(Environment.NewLine);
+
+            htmlString = Regex.Replace(htmlString, @"(<[/][^>]*>)", sb.ToString());
+
+            // Replace two newline feeds with one
+            sb.Clear();
+            sb.Append(Environment.NewLine).Append(Environment.NewLine);
+
+            htmlString = htmlString.Replace(sb.ToString(), Environment.NewLine);
+
+            // Find the pattern where there is nothing but a newline feed between starting and ending tag of same element,
+            // then remove the newline feed between them
+            Match match = Regex.Match(htmlString, @"(<([^/][^>]*)>)([\n|\r\n]+)(<[/]([^>]*)>)");
+
+            if (match.Groups[2].Value.StartsWith(match.Groups[5].Value))
+            {
+                sb.Clear();
+                sb.Append("$1$3");
+                htmlString = Regex.Replace(htmlString, @"(<[^/][^>]*>)([\n|\r\n]+)(<[/][^>]*>)", sb.ToString());
+            }
+
+            // Remove newline feed(s) from starting and ending of the string
+            htmlString = htmlString.Trim(Environment.NewLine.ToCharArray());
+
+            // Return formatted markup
+            return htmlString;
         }
     }
 }

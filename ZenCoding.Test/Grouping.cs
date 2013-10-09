@@ -15,7 +15,7 @@ namespace ZenCoding.Test
         }
 
         [TestMethod]
-        public void SimpleGroupingExample()
+        public void GroupingSimpleExample()
         {
             string result = _parser.Parse("div>(header>div)+section", ZenType.HTML);
             string expected = "<div>" +
@@ -30,7 +30,22 @@ namespace ZenCoding.Test
         }
 
         [TestMethod]
-        public void SubGroupingExample()
+        public void GroupingComplexExample()
+        {
+            string result = _parser.Parse("div>(header>div{Hello World})>section{This is a section}", ZenType.HTML);
+            string expected = "<div>" +
+                                "<header>" +
+                                    "<div>Hello World</div>" +
+                                "</header>" +
+                                "<section>This is a section</section>" +
+                              "</div>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+
+        }
+
+        [TestMethod]
+        public void GroupingSubGroupingExample()
         {
             string result = _parser.Parse("div>(header>(div>span))+section", ZenType.HTML);
             string expected = "<div>" +
@@ -47,7 +62,7 @@ namespace ZenCoding.Test
         }
 
         [TestMethod]
-        public void MultipleGroupingExample()
+        public void GroupingMultipleGroupingExample()
         {
             string result = _parser.Parse("div>(header>div)+section>(ul>li*2>a)+footer>(div>span)", ZenType.HTML);
             string expected = "<div>" +
