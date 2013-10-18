@@ -84,6 +84,7 @@ namespace ZenCoding
                 case "input":
                     CustomHtmlInput input = new CustomHtmlInput();
                     input.Attributes["value"] = "";
+                    input.Attributes["type"] = "";
                     return input;
 
                 case "img":

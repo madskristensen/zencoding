@@ -107,7 +107,7 @@ namespace ZenCoding.Test
         public void AttributesCrazyQuotesTest()
         {
             string result = _parser.Parse("p[title='Single quotes within single quotes: and this statement's ending with apostrophe'' data-foo=\"\"bar\" one\"]", ZenType.HTML);
-            string expected = "<p title=\"Single quotes within single quotes: and this statement&#39;s ending with apostrophe&#39;\" data-foo=\"&quot;bar&quot; one\"></p>";
+            string expected = "<p title=\"Single quotes within single quotes: and this statement's ending with apostrophe'\" data-foo=\"\"bar\" one\"></p>";
 
             Assert.AreEqual(expected, result);
         }

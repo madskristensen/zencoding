@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using System.Xml;
 
 namespace ZenCoding
 {
@@ -484,48 +486,56 @@ namespace ZenCoding
             {
                 ctrl.RenderControl(hw);
 
-                return InjectNewLineInMarkup(sb);
+                return InjectNewLineInMarkup(sb.ToString());
             }
         }
 
-        private static string InjectNewLineInMarkup(StringBuilder sb)
+        private static string InjectNewLineInMarkup(string MinifiedHtml)
         {
-            var htmlString = sb.ToString().Trim().Replace(Environment.NewLine, String.Empty);
+            // For protection: apparently, there is a bug in XhtmlTextWritter which appends newline in some controls
+            var htmlString = MinifiedHtml.Trim().Replace(Environment.NewLine, String.Empty);
 
-            // Replace newline feed before and after start tag
-            sb.Clear();
-            sb.Append(Environment.NewLine).Append("$1").Append(Environment.NewLine);
+            XmlDocument doc = new XmlDocument();
+            doc.XmlResolver = null;
 
-            htmlString = Regex.Replace(htmlString, @"(<[^/][^>]*>)", sb.ToString());
-
-            // Replace newline feed before and after end tag
-            sb.Clear();
-            sb.Append(Environment.NewLine).Append("$1").Append(Environment.NewLine);
-
-            htmlString = Regex.Replace(htmlString, @"(<[/][^>]*>)", sb.ToString());
-
-            // Replace two newline feeds with one
-            sb.Clear();
-            sb.Append(Environment.NewLine).Append(Environment.NewLine);
-
-            htmlString = htmlString.Replace(sb.ToString(), Environment.NewLine);
-
-            // Find the pattern where there is nothing but a newline feed between starting and ending tag of same element,
-            // then remove the newline feed between them
-            Match match = Regex.Match(htmlString, @"(<([^/][^>]*)>)([\n|\r\n]+)(<[/]([^>]*)>)");
-
-            if (match.Groups[2].Value.StartsWith(match.Groups[5].Value))
+            try
             {
-                sb.Clear();
-                sb.Append("$1$3");
-                htmlString = Regex.Replace(htmlString, @"(<[^/][^>]*>)([\n|\r\n]+)(<[/][^>]*>)", sb.ToString());
+                doc.LoadXml("<root>" + htmlString + "</root>");
+            }
+            catch
+            {
+                doc.LoadXml(htmlString);
             }
 
-            // Remove newline feed(s) from starting and ending of the string
-            htmlString = htmlString.Trim(Environment.NewLine.ToCharArray());
+            // Final cleanup: remove tem tag and replace two line break feeds with one
+            htmlString = RecursivelyTraverseAndImplodeNewline(doc.ChildNodes)
+                            .Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine)
+                            .Replace(Environment.NewLine + "<root>" + Environment.NewLine, String.Empty)
+                            .Replace(Environment.NewLine + "</root>" + Environment.NewLine, String.Empty);
 
-            // Return formatted markup
-            return htmlString;
+            return HttpUtility.HtmlDecode(htmlString);
+        }
+
+        private static string RecursivelyTraverseAndImplodeNewline(XmlNodeList doc)
+        {
+            string finalMarkup = string.Empty;
+
+            foreach (XmlNode node in doc)
+            {
+                XmlNode tempNode = node;
+
+                string returnedMarkup = RecursivelyTraverseAndImplodeNewline(node.ChildNodes);
+                try
+                {
+                    tempNode.InnerXml = returnedMarkup;
+                }
+                catch { }
+                finally
+                {
+                    finalMarkup += Environment.NewLine + tempNode.OuterXml + Environment.NewLine;
+                }
+            }
+            return finalMarkup;
         }
     }
 }
