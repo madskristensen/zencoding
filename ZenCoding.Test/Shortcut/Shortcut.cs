@@ -47,7 +47,7 @@ namespace ZenCoding.Test
         public void ShortcutComplex()
         {
             string result = _parser.Parse("html:xt>div#header>div#logo+ul#nav>li.item-$*5>a", ZenType.HTML);
-            string expected = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" +
+            string expected = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"[]>" +
                               "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">" +
                               "<head>" +
                                   "<title></title>" +

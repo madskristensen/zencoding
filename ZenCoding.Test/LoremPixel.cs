@@ -67,7 +67,7 @@ namespace ZenCoding.Test
         public void LoremPixelWithAttributes()
         {
             string result = _parser.Parse("pix[alt=\"tag's here\" title=\"picture title\" data-foo=\"bar\"]", ZenType.HTML);
-            string expected = "<img src=\"http://lorempixel.com/30/30/\" alt=\"tag&#39;s here\" title=\"picture title\" data-foo=\"bar\" />";
+            string expected = "<img src=\"http://lorempixel.com/30/30/\" alt=\"tag's here\" title=\"picture title\" data-foo=\"bar\" />";
 
             Assert.AreEqual(expected, result);
         }

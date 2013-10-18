@@ -17,11 +17,14 @@ namespace ZenCoding.Test
         [TestMethod]
         public void Formatting1()
         {
-            string result = _parser.Parse("div>a*2", ZenType.HTML);
+            string result = _parser.Parse("div>a*2+img^input", ZenType.HTML);
+
             string expected = "<div>" + Environment.NewLine +
                               "<a href=\"\"></a>" + Environment.NewLine +
                               "<a href=\"\"></a>" + Environment.NewLine +
-                              "</div>";
+                              "<img src=\"\" alt=\"\" />" + Environment.NewLine +
+                              "</div>" + Environment.NewLine +
+                              "<input type=\"\" value=\"\" />";
 
             Assert.AreEqual(expected, result);
         }
