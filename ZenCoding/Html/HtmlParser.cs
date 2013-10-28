@@ -492,50 +492,49 @@ namespace ZenCoding
 
         private static string InjectNewLineInMarkup(string MinifiedHtml)
         {
-            // For protection: apparently, there is a bug in XhtmlTextWritter which appends newline in some controls
-            var htmlString = MinifiedHtml.Trim().Replace(Environment.NewLine, String.Empty);
-
             XmlDocument doc = new XmlDocument();
             doc.XmlResolver = null;
 
             try
             {
-                doc.LoadXml("<root>" + htmlString + "</root>");
+                doc.LoadXml("<root>" + MinifiedHtml + "</root>");
             }
             catch
             {
-                doc.LoadXml(htmlString);
+                doc.LoadXml(MinifiedHtml);
             }
 
             // Final cleanup: remove tem tag and replace two line break feeds with one
-            htmlString = RecursivelyTraverseAndImplodeNewline(doc.ChildNodes)
+            MinifiedHtml = TraverseAndImplodeNewline(doc.ChildNodes)
                             .Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine)
                             .Replace(Environment.NewLine + "<root>" + Environment.NewLine, String.Empty)
                             .Replace(Environment.NewLine + "</root>" + Environment.NewLine, String.Empty);
 
-            return HttpUtility.HtmlDecode(htmlString);
+            return HttpUtility.HtmlDecode(MinifiedHtml);
         }
 
-        private static string RecursivelyTraverseAndImplodeNewline(XmlNodeList doc)
+        private static string TraverseAndImplodeNewline(XmlNodeList doc)
         {
-            string finalMarkup = string.Empty;
+            StringBuilder finalMarkup = new StringBuilder();
 
             foreach (XmlNode node in doc)
             {
                 XmlNode tempNode = node;
 
-                string returnedMarkup = RecursivelyTraverseAndImplodeNewline(node.ChildNodes);
                 try
                 {
-                    tempNode.InnerXml = returnedMarkup;
+                    tempNode.InnerXml = TraverseAndImplodeNewline(node.ChildNodes);
                 }
                 catch { }
                 finally
                 {
-                    finalMarkup += Environment.NewLine + tempNode.OuterXml + Environment.NewLine;
+                    finalMarkup
+                        .Append(Environment.NewLine)
+                        .Append(tempNode.OuterXml)
+                        .Append(Environment.NewLine);
                 }
             }
-            return finalMarkup;
+            return finalMarkup.ToString();
         }
     }
 }
