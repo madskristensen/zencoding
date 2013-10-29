@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace ZenCoding
 {
@@ -477,64 +479,17 @@ namespace ZenCoding
             }
         }
 
-        public static string RenderControl(Control ctrl)
+        public static string RenderControl(Control control)
         {
-            StringBuilder sb = new StringBuilder();
-
-            using (StringWriter tw = new StringWriter(sb))
-            using (XhtmlTextWriter hw = new XhtmlTextWriter(tw))
+            using (StringWriter stringWriter = new StringWriter())
+            using (XhtmlTextWriter htmlTextWriter = new XhtmlTextWriter(stringWriter))
             {
-                ctrl.RenderControl(hw);
+                control.RenderControl(htmlTextWriter);
 
-                return InjectNewLineInMarkup(sb.ToString());
+                return HttpUtility.HtmlDecode(stringWriter.ToString())
+                    .Trim(Environment.NewLine.ToArray())
+                    .Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
             }
-        }
-
-        private static string InjectNewLineInMarkup(string MinifiedHtml)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.XmlResolver = null;
-
-            try
-            {
-                doc.LoadXml("<root>" + MinifiedHtml + "</root>");
-            }
-            catch
-            {
-                doc.LoadXml(MinifiedHtml);
-            }
-
-            // Final cleanup: remove tem tag and replace two line break feeds with one
-            MinifiedHtml = TraverseAndImplodeNewline(doc.ChildNodes)
-                            .Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine)
-                            .Replace(Environment.NewLine + "<root>" + Environment.NewLine, String.Empty)
-                            .Replace(Environment.NewLine + "</root>" + Environment.NewLine, String.Empty);
-
-            return HttpUtility.HtmlDecode(MinifiedHtml);
-        }
-
-        private static string TraverseAndImplodeNewline(XmlNodeList doc)
-        {
-            StringBuilder finalMarkup = new StringBuilder();
-
-            foreach (XmlNode node in doc)
-            {
-                XmlNode tempNode = node;
-
-                try
-                {
-                    tempNode.InnerXml = TraverseAndImplodeNewline(node.ChildNodes);
-                }
-                catch { }
-                finally
-                {
-                    finalMarkup
-                        .Append(Environment.NewLine)
-                        .Append(tempNode.OuterXml)
-                        .Append(Environment.NewLine);
-                }
-            }
-            return finalMarkup.ToString();
         }
     }
 }

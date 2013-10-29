@@ -73,7 +73,7 @@ namespace ZenCoding
                     return new EmptyHtmlControl();
 
                 case "a":
-                    HtmlAnchor a = new HtmlAnchor();
+                    var a = new CustomHtmlAnchor();
                     a.Attributes["href"] = "";
                     return a;
 
@@ -88,7 +88,7 @@ namespace ZenCoding
                     return input;
 
                 case "img":
-                    var img = new HtmlImage();
+                    var img = new CustomHtmlImage();
                     img.Attributes["src"] = string.Empty;
                     img.Attributes["alt"] = string.Empty;
                     return img;
@@ -98,10 +98,10 @@ namespace ZenCoding
                     return new HtmlGenericSelfClosing("source");
                     
                 case "meta":
-                    return new HtmlMeta();
+                    return new CustomHtmlMeta();
 
                 case "link":
-                    return new HtmlLink();
+                    return new CustomHtmlLink();
 
                 case "abbr":
                 case "acronym":
@@ -202,7 +202,7 @@ namespace ZenCoding
 
                 case "textarea":
                 case "tarea":
-                    HtmlTextArea textarea = new HtmlTextArea();
+                    var textarea = new CustomHtmlTextArea();
                     textarea.ID = string.Empty;
                     textarea.Attributes["cols"] = string.Empty;
                     textarea.Attributes["rows"] = string.Empty;
@@ -228,7 +228,7 @@ namespace ZenCoding
                     return new HtmlGenericSelfClosing(tagName);
             }
 
-            return new HtmlGenericControl(tagName);
+            return new BlockHtmlControl(tagName);
         }
 
         public static Control CreateDoctypes(string part, ref List<Control> current)

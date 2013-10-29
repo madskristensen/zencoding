@@ -4,22 +4,16 @@ using System.Web.UI.HtmlControls;
 
 namespace ZenCoding
 {
-    class BlockHtmlControl : HtmlGenericControl
+    public class CustomHtmlLink : HtmlLink
     {
-        public BlockHtmlControl(string tagName)
+        public CustomHtmlLink()
         {
-            TagName = tagName;
         }
 
         protected override void RenderBeginTag(HtmlTextWriter writer)
         {
             writer.Write(Environment.NewLine);
             base.RenderBeginTag(writer);
-        }
-
-        protected override void RenderEndTag(HtmlTextWriter writer)
-        {
-            base.RenderEndTag(writer);
             writer.Write(Environment.NewLine);
         }
     }
