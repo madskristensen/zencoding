@@ -52,6 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Html\BlockHtmlControl.cs" />
+    <Compile Include="Html\CustomHtmlMeta.cs" />
+    <Compile Include="Html\CustomHtmlLink.cs" />
+    <Compile Include="Html\CustomHtmlTextArea.cs" />
+    <Compile Include="Html\CustomHtmlAnchor.cs" />
+    <Compile Include="Html\CustomHtmlImage.cs" />
     <Compile Include="Html\LoremControl.cs" />
     <Compile Include="Html\LoremPixel.cs" />
     <Compile Include="Html\SelfClosingHtmlControl.cs" />

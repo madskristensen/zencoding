@@ -86,12 +86,8 @@ namespace ZenCoding.Test
         public void CountH1to6()
         {
             string result = _parser.Parse("h$[title=item$]{Header $}*2", ZenType.HTML);
-            string expected = "<h1 title=\"item1\">" + Environment.NewLine +
-                              "Header 1" + Environment.NewLine +
-                              "</h1>" + Environment.NewLine +
-                              "<h2 title=\"item2\">" + Environment.NewLine +
-                              "Header 2" + Environment.NewLine +
-                              "</h2>";
+            string expected = "<h1 title=\"item1\">" + "Header 1" + "</h1>" + Environment.NewLine +
+                              "<h2 title=\"item2\">" + "Header 2" + "</h2>";
 
             Assert.AreEqual(expected, result);
         }
@@ -100,12 +96,8 @@ namespace ZenCoding.Test
         public void CountPadLeft()
         {
             string result = _parser.Parse("h1[title=item$]{Header $$$}*2", ZenType.HTML);
-            string expected = "<h1 title=\"item1\">" + Environment.NewLine +
-                              "Header 001" + Environment.NewLine +
-                              "</h1>" + Environment.NewLine +
-                              "<h1 title=\"item2\">" + Environment.NewLine +
-                              "Header 002" + Environment.NewLine +
-                              "</h1>";
+            string expected = "<h1 title=\"item1\">" + "Header 001" + "</h1>" + Environment.NewLine +
+                              "<h1 title=\"item2\">" + "Header 002" + "</h1>";
 
             Assert.AreEqual(expected, result);
         }

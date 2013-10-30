@@ -5,7 +5,7 @@ using System.Web.UI.HtmlControls;
 
 namespace ZenCoding
 {
-    public class LoremPixel : HtmlImage
+    public class LoremPixel : CustomHtmlImage
     {
         private static readonly string _url = "http://lorempixel.com/";
         private static readonly string[] _categories = new string[] { "abstract", "animals", "business", "cats", "city", "food", "nightlife", "fashion", "people", "nature", "sports", "technics", "transport" };

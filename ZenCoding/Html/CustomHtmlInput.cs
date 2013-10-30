@@ -1,9 +1,10 @@
-﻿using System.Web.UI;
+﻿using System;
+using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
 namespace ZenCoding
 {
-    class CustomHtmlInput : HtmlGenericControl
+    public class CustomHtmlInput : HtmlGenericControl
     {
         public CustomHtmlInput()
         {
@@ -12,7 +13,8 @@ namespace ZenCoding
 
         protected override void Render(System.Web.UI.HtmlTextWriter writer)
         {
-            //this will output the start of the img element - <img
+            writer.Write(Environment.NewLine);
+
             writer.WriteBeginTag("input");
 
             writer.WriteAttribute("type", Attributes["type"]);
@@ -25,11 +27,8 @@ namespace ZenCoding
                     writer.WriteAttribute(attr, Attributes[attr]);
             }
 
-            //this will output the src and alt attributes
-            //writer.WriteAttribute("src", src);
-            //writer.WriteAttribute("alt", alt);
-
             writer.Write(HtmlTextWriter.SelfClosingTagEnd);
+            writer.Write(Environment.NewLine);
         }
     }
 }

@@ -47,27 +47,37 @@ namespace ZenCoding.Test
         public void ShortcutComplex()
         {
             string result = _parser.Parse("html:xt>div#header>div#logo+ul#nav>li.item-$*5>a", ZenType.HTML);
-            string expected = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"[]>" +
-                              "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">" +
-                              "<head>" +
-                                  "<title></title>" +
-                                  "<meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-8\" />" +
-                              "</head>" +
-                              "<body>" +
-                                  "<div id=\"header\">" +
-                                      "<div id=\"logo\"></div>" +
-                                      "<ul id=\"nav\">" +
-                                          "<li class=\"item-1\"><a href=\"\"></a></li>" +
-                                          "<li class=\"item-2\"><a href=\"\"></a></li>" +
-                                          "<li class=\"item-3\"><a href=\"\"></a></li>" +
-                                          "<li class=\"item-4\"><a href=\"\"></a></li>" +
-                                          "<li class=\"item-5\"><a href=\"\"></a></li>" +
-                                      "</ul>" +
-                                  "</div>" +
-                              "</body>" +
+            string expected = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + Environment.NewLine +
+                              "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">" + Environment.NewLine +
+                              "<head>" + Environment.NewLine +
+                                  "<title></title>" + Environment.NewLine +
+                                  "<meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-8\" />" + Environment.NewLine +
+                              "</head>" + Environment.NewLine +
+                              "<body>" + Environment.NewLine +
+                                  "<div id=\"header\">" + Environment.NewLine +
+                                      "<div id=\"logo\"></div>" + Environment.NewLine +
+                                      "<ul id=\"nav\">" + Environment.NewLine +
+                                          "<li class=\"item-1\">" + Environment.NewLine +
+                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "</li>" + Environment.NewLine +
+                                          "<li class=\"item-2\">" + Environment.NewLine +
+                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "</li>" + Environment.NewLine +
+                                          "<li class=\"item-3\">" + Environment.NewLine +
+                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "</li>" + Environment.NewLine +
+                                          "<li class=\"item-4\">" + Environment.NewLine +
+                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "</li>" + Environment.NewLine +
+                                          "<li class=\"item-5\">" + Environment.NewLine +
+                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "</li>" + Environment.NewLine +
+                                      "</ul>" + Environment.NewLine +
+                                  "</div>" + Environment.NewLine +
+                              "</body>" + Environment.NewLine +
                               "</html>";
 
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
