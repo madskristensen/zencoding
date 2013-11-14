@@ -55,20 +55,20 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Attributes.cs" />
-    <Compile Include="ClimbUp.cs" />
-    <Compile Include="Anonymous.cs" />
-    <Compile Include="Lorem.cs" />
-    <Compile Include="Formatting.cs" />
-    <Compile Include="Grouping.cs" />
-    <Compile Include="InnerText.cs" />
-    <Compile Include="LoremPixel.cs" />
-    <Compile Include="Plus.cs" />
-    <Compile Include="Shortcut\Shortcut.cs" />
-    <Compile Include="Validate.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="Count.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="Html\Attributes.cs" />
+    <Compile Include="Html\ClimbUp.cs" />
+    <Compile Include="Html\Anonymous.cs" />
+    <Compile Include="Html\Lorem.cs" />
+    <Compile Include="Html\Formatting.cs" />
+    <Compile Include="Html\Grouping.cs" />
+    <Compile Include="Html\InnerText.cs" />
+    <Compile Include="Html\LoremPixel.cs" />
+    <Compile Include="Html\Plus.cs" />
+    <Compile Include="Html\Shortcut.cs" />
+    <Compile Include="Html\Validate.cs" />
+    <Compile Include="Html\Token.cs" />
+    <Compile Include="Html\Count.cs" />
+    <Compile Include="Html\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +76,9 @@
       <Project>{c8438da3-0325-46ea-9d67-9736fbe2f871}</Project>
       <Name>ZenCoding</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Css\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

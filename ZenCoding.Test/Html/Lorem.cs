@@ -26,6 +26,17 @@ namespace ZenCoding.Test
         [TestMethod]
         public void Lorem2()
         {
+            string result = _parser.Parse("lorem*3", ZenType.HTML);
+            string expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit fusce vel sapien elit in malesuada semper mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus." + Environment.NewLine +
+                              "Lorem ipsum dolor sit amet, consectetur adipiscing elit fusce vel sapien elit in malesuada semper mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus." + Environment.NewLine +
+                              "Lorem ipsum dolor sit amet, consectetur adipiscing elit fusce vel sapien elit in malesuada semper mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.";
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void Lorem3()
+        {
             string result = _parser.Parse("p>lorem", ZenType.HTML);
             string expected = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit fusce vel sapien elit in malesuada semper mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.</p>";
 

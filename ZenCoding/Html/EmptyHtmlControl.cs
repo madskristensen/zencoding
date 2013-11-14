@@ -1,4 +1,5 @@
-﻿using System.Web.UI;
+﻿using System;
+using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
 namespace ZenCoding
@@ -12,7 +13,8 @@ namespace ZenCoding
 
         protected override void Render(HtmlTextWriter writer)
         {
-            RenderChildren(writer);
+            base.RenderChildren(writer);
+            writer.Write(Environment.NewLine);
         }
     }
 }
