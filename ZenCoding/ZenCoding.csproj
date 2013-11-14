@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Css\CssParser.cs" />
     <Compile Include="Html\BlockHtmlControl.cs" />
     <Compile Include="Html\CustomHtmlMeta.cs" />
     <Compile Include="Html\CustomHtmlLink.cs" />

@@ -8,11 +8,12 @@ namespace ZenCoding
             switch (type)
             {
                 case ZenType.CSS:
-                    break;
+                    CssParser cssParser = new CssParser();
+                    return cssParser.Parse(zenSyntax.Trim());
 
                 case ZenType.HTML:
-                    HtmlParser parser = new HtmlParser();
-                    return parser.Parse(zenSyntax.Trim());
+                    HtmlParser htmlParser = new HtmlParser();
+                    return htmlParser.Parse(zenSyntax.Trim());
             }
 
             return null;
