@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Web.UI;
 
 namespace ZenCoding
 {
@@ -56,6 +58,12 @@ namespace ZenCoding
             }
 
             return result;
+        }
+
+        protected override void Render(HtmlTextWriter writer)
+        {
+            base.RenderChildren(writer);
+            writer.Write(Environment.NewLine);
         }
     }
 }

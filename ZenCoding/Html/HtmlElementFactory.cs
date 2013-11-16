@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -11,7 +12,7 @@ namespace ZenCoding
     {
         public static HtmlControl CloneElement(this HtmlControl element, int count)
         {
-            HtmlControl control = HtmlElementFactory.Create(element.TagName.Increment(count));
+            HtmlControl control = HtmlElementFactory.Create(element.TagName.Increment(count), element.GetType(), true);
 
             foreach (var attribute in element.Attributes.Keys)
             {
@@ -41,14 +42,14 @@ namespace ZenCoding
             {
                 lorem.InnerText = lorem.Generate(count);
             }
-           
+
             return control;
         }
 
         public static string Increment(this string text, int count)
         {
             MatchCollection matches = Regex.Matches(text, @"(\$+)");
-            
+
             foreach (Match match in matches)
             {
                 text = text.Replace(match.Value, (count + 1).ToString().PadLeft(match.Value.Length, '0'));
@@ -57,11 +58,12 @@ namespace ZenCoding
             return text;
         }
 
-        public static HtmlControl Create(string tagName)
+        public static HtmlControl Create(string tagName, Type type = null, bool isClone = false)
         {
-            if (tagName.StartsWith("lorem", System.StringComparison.Ordinal))
+            if (tagName.StartsWith("lorem", System.StringComparison.Ordinal) ||
+                (type == typeof(LoremControl) && isClone))
             {
-                return new LoremControl(tagName);
+                return new LoremControl(isClone ? "lorem0" : tagName);
             }
             else if (tagName.StartsWith("pix", System.StringComparison.Ordinal))
             {
@@ -97,7 +99,7 @@ namespace ZenCoding
                 case "source":
                 case "src":
                     return new HtmlGenericSelfClosing("source");
-                    
+
                 case "meta":
                     return new CustomHtmlMeta();
 
@@ -115,7 +117,7 @@ namespace ZenCoding
                     area.Attributes["shape"] = string.Empty;
                     area.Attributes["coords"] = string.Empty;
                     area.Attributes["href"] = string.Empty;
-                    area.Attributes["alt"] = string.Empty;                    
+                    area.Attributes["alt"] = string.Empty;
                     return area;
 
                 case "iframe":
@@ -132,7 +134,7 @@ namespace ZenCoding
                     return param;
 
                 case "section":
-                case "sect" :
+                case "sect":
                     return new BlockHtmlControl("section");
 
                 case "article":
@@ -217,10 +219,10 @@ namespace ZenCoding
 
                 case "html":
                 case "head":
-                case "body":                
+                case "body":
                 case "div":
                 case "table":
-                case "tr":                
+                case "tr":
                 case "p":
                     return new BlockHtmlControl(tagName);
 

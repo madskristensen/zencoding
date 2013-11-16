@@ -37,11 +37,11 @@ namespace ZenCoding.Test
         {
             string result = _parser.Parse("ul>li*2>a[prop=val][href=ost]{Click here $}", ZenType.HTML);
             string expected = "<ul>" + Environment.NewLine +
-                                "<li>" + Environment.NewLine +
-                                "<a href=\"ost\" prop=\"val\">" + "Click here 1" + "</a>" + Environment.NewLine +
+                                "<li>" +
+                                "<a href=\"ost\" prop=\"val\">" + "Click here 1" + "</a>" +
                                 "</li>" + Environment.NewLine +
-                                "<li>" + Environment.NewLine +
-                                "<a href=\"ost\" prop=\"val\">" + "Click here 2" + "</a>" + Environment.NewLine +
+                                "<li>" +
+                                "<a href=\"ost\" prop=\"val\">" + "Click here 2" + "</a>" +
                                 "</li>" + Environment.NewLine +
                               "</ul>";
 
@@ -52,9 +52,11 @@ namespace ZenCoding.Test
         public void InnerTextMultiple()
         {
             string result = _parser.Parse("p>{Click }>a{here}+{ to continue}", ZenType.HTML);
-            string expected = "<p>Click <a href=\"\">here</a> to continue</p>";
+            string expected = "<p>" + Environment.NewLine + "Click " +
+                              Environment.NewLine + "<a href=\"\">here</a>" + Environment.NewLine +
+                               " to continue" + Environment.NewLine + "</p>";
 
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
@@ -70,18 +72,18 @@ namespace ZenCoding.Test
         public void InnerTextSeparator()
         {
             string result = _parser.Parse("footer>p{Sample + text}", ZenType.HTML);
-            string expected = "<footer><p>Sample + text</p></footer>";
+            string expected = "<footer>" + Environment.NewLine + "<p>Sample + text</p>" + Environment.NewLine + "</footer>";
 
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
         public void InnerTextSeparator2()
         {
             string result = _parser.Parse("footer>p{Sample >> text}", ZenType.HTML);
-            string expected = "<footer><p>Sample >> text</p></footer>";
+            string expected = "<footer>" + Environment.NewLine + "<p>Sample >> text</p>" + Environment.NewLine + "</footer>";
 
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
@@ -90,7 +92,7 @@ namespace ZenCoding.Test
             string result = _parser.Parse("span.required{*}", ZenType.HTML);
             string expected = "<span class=\"required\">*</span>";
 
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+            Assert.AreEqual(expected, result);
         }
     }
 }

@@ -2,14 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
-using System.Xml;
-using System.Xml.XPath;
 
 namespace ZenCoding
 {
@@ -486,9 +482,9 @@ namespace ZenCoding
             {
                 control.RenderControl(htmlTextWriter);
 
-                return HttpUtility.HtmlDecode(stringWriter.ToString())
-                    .Trim(Environment.NewLine.ToArray())
-                    .Replace(Environment.NewLine + Environment.NewLine, Environment.NewLine);
+                return Regex.Replace(HttpUtility.HtmlDecode(stringWriter.ToString())
+                                         .Trim(Environment.NewLine.ToArray()),
+                                     "([" + Environment.NewLine + "]+)", Environment.NewLine); // Replace multiple linefeeds with single.
             }
         }
     }
