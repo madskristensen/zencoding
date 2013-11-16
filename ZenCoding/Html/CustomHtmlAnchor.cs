@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
@@ -16,9 +13,15 @@ namespace ZenCoding.Html
 
         protected override void Render(HtmlTextWriter writer)
         {
-            writer.Write(Environment.NewLine);
-            base.Render(writer);
-            writer.Write(Environment.NewLine);
+            if (this.Controls.Count > 0 && this.Controls[0].Controls.Count > 0 || this.Controls.Count > 1
+                || (this.Parent != null && (this.Parent.Controls.Count > 0 && this.Parent.Controls[0].Controls.Count > 1 || this.Parent.Controls.Count > 1)))
+            {
+                writer.WriteLine(Environment.NewLine);
+                base.Render(writer);
+                writer.Write(Environment.NewLine);
+            }
+            else
+                base.Render(writer);
         }
     }
 }

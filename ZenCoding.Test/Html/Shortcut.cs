@@ -57,20 +57,20 @@ namespace ZenCoding.Test
                                   "<div id=\"header\">" + Environment.NewLine +
                                       "<div id=\"logo\"></div>" + Environment.NewLine +
                                       "<ul id=\"nav\">" + Environment.NewLine +
-                                          "<li class=\"item-1\">" + Environment.NewLine +
-                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "<li class=\"item-1\">" +
+                                          "<a href=\"\"></a>" +
                                           "</li>" + Environment.NewLine +
-                                          "<li class=\"item-2\">" + Environment.NewLine +
-                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "<li class=\"item-2\">" +
+                                          "<a href=\"\"></a>" +
                                           "</li>" + Environment.NewLine +
-                                          "<li class=\"item-3\">" + Environment.NewLine +
-                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "<li class=\"item-3\">" +
+                                          "<a href=\"\"></a>" +
                                           "</li>" + Environment.NewLine +
-                                          "<li class=\"item-4\">" + Environment.NewLine +
-                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "<li class=\"item-4\">" +
+                                          "<a href=\"\"></a>"+
                                           "</li>" + Environment.NewLine +
-                                          "<li class=\"item-5\">" + Environment.NewLine +
-                                          "<a href=\"\"></a>" + Environment.NewLine +
+                                          "<li class=\"item-5\">" + 
+                                          "<a href=\"\"></a>" + 
                                           "</li>" + Environment.NewLine +
                                       "</ul>" + Environment.NewLine +
                                   "</div>" + Environment.NewLine +
@@ -84,7 +84,7 @@ namespace ZenCoding.Test
         public void ShortcutNested()
         {
             string result = _parser.Parse("form>input:t", ZenType.HTML);
-            string expected = "<form>" + Environment.NewLine + "<input type=\"text\" value=\"\" id=\"\" />" + Environment.NewLine + "</form>";
+            string expected = "<form><input type=\"text\" value=\"\" id=\"\" /></form>";
 
             Assert.AreEqual(expected, result);
         }

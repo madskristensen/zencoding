@@ -13,7 +13,11 @@ namespace ZenCoding
 
         protected override void Render(System.Web.UI.HtmlTextWriter writer)
         {
-            writer.Write(Environment.NewLine);
+            if (this.Controls.Count > 0 && this.Controls[0].Controls.Count > 0 || this.Controls.Count > 1
+                || (this.Parent != null && (this.Parent.Controls.Count > 0 && this.Parent.Controls[0].Controls.Count > 1 || this.Parent.Controls.Count > 1)))
+            {
+                writer.WriteLine(Environment.NewLine);
+            }
 
             writer.WriteBeginTag("input");
 
@@ -28,7 +32,11 @@ namespace ZenCoding
             }
 
             writer.Write(HtmlTextWriter.SelfClosingTagEnd);
-            writer.Write(Environment.NewLine);
+            if (this.Controls.Count > 0 && this.Controls[0].Controls.Count > 0 || this.Controls.Count > 1
+                || (this.Parent != null && (this.Parent.Controls.Count > 0 && this.Parent.Controls[0].Controls.Count > 1 || this.Parent.Controls.Count > 1)))
+            {
+                writer.WriteLine(Environment.NewLine);
+            }
         }
     }
 }
