@@ -10,6 +10,8 @@ namespace ZenCoding
 {
     public static class HtmlElementFactory
     {
+        private static readonly Regex _valueCounterRegex = new Regex(@"(\$+)", RegexOptions.Compiled);
+
         public static HtmlControl CloneElement(this HtmlControl element, int count)
         {
             HtmlControl control = HtmlElementFactory.Create(element.TagName.Increment(count), element.GetType(), true);
@@ -48,7 +50,7 @@ namespace ZenCoding
 
         public static string Increment(this string text, int count)
         {
-            MatchCollection matches = Regex.Matches(text, @"(\$+)");
+            MatchCollection matches = _valueCounterRegex.Matches(text);
 
             foreach (Match match in matches)
             {

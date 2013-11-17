@@ -14,6 +14,8 @@ namespace ZenCoding
         private static char[] _attr = new[] { '#', '.', '[', '{' };
         private static char[] _elem = new[] { '>', '+', '^' };
         private static Regex _shortcuts = new Regex(@"^([\w]+):([\w]+)$", RegexOptions.Compiled);
+        private static Regex _emptyingComponent = new Regex("{([^}]+)}", RegexOptions.Compiled);
+        private static Regex _collapseMultipleLinefeeds = new Regex("([" + Environment.NewLine + "]+)", RegexOptions.Compiled);
 
         public static bool IsValid(string zenSyntax)
         {
@@ -384,7 +386,7 @@ namespace ZenCoding
                 cleanPart = subParts[0].TrimStart(_attr).Trim(_elem);
             }
 
-            cleanPart = Regex.Replace(cleanPart, "{([^}]+)}", string.Empty);
+            cleanPart = _emptyingComponent.Replace(cleanPart, string.Empty);
 
             return count;
         }
@@ -482,9 +484,8 @@ namespace ZenCoding
             {
                 control.RenderControl(htmlTextWriter);
 
-                return Regex.Replace(HttpUtility.HtmlDecode(stringWriter.ToString())
-                                         .Trim(Environment.NewLine.ToArray()),
-                                     "([" + Environment.NewLine + "]+)", Environment.NewLine); // Replace multiple linefeeds with single.
+                return _collapseMultipleLinefeeds.Replace(HttpUtility.HtmlDecode(stringWriter.ToString())
+                                         .Trim(Environment.NewLine.ToArray()), Environment.NewLine); // Replace multiple linefeeds with single.
             }
         }
     }

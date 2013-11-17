@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using ZenCoding.Html;
 
 namespace ZenCoding
@@ -9,6 +10,14 @@ namespace ZenCoding
     {
         private static readonly string _url = "http://lorempixel.com/";
         private static readonly string[] _categories = new string[] { "abstract", "animals", "business", "cats", "city", "food", "nightlife", "fashion", "people", "nature", "sports", "technics", "transport" };
+        private static readonly Regex _numberExtractor = new Regex("[^\\d]", RegexOptions.Compiled);
+
+        public int AssetWidth { get; set; }
+        public int AssetHeight { get; set; }
+        public string Category { get; set; }
+        public string Text { get; set; }
+        public bool IsGray { get; set; }
+
 
         public LoremPixel(string loremPixelText)
         {
@@ -102,19 +111,9 @@ namespace ZenCoding
             return builder.ToString();
         }
 
-        public int AssetWidth { get; set; }
-
-        public int AssetHeight { get; set; }
-
-        public string Category { get; set; }
-
-        public string Text { get; set; }
-
-        public bool IsGray { get; set; }
-
         private string[] ExtractNumbers(string theValue)
         {
-            return System.Text.RegularExpressions.Regex.Split(theValue, "[^\\d]");
+            return _numberExtractor.Split(theValue);
         }
 
         public static bool IsInteger(string theValue)
