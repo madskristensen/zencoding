@@ -10,6 +10,8 @@ namespace ZenCoding
         private static readonly string[] _array = _raw.Split(' ');
         private int _length = 30;
 
+        public int Length { get; set; }
+
         public LoremControl(string loremText)
         {
             int length = 30;
@@ -22,8 +24,6 @@ namespace ZenCoding
             this.InnerText = GetLoremText(_length);
             Length = _length;
         }
-
-        public int Length { get; set; }
 
         private static string GetLoremText(int words)
         {
