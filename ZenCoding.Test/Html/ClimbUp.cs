@@ -55,7 +55,7 @@ namespace ZenCoding.Test
             string result = _parser.Parse("p.test^p.cake", ZenType.HTML);
             string expected = "<p class=\"test\"></p>" +
                               "<p class=\"cake\"></p>";
-                                
+
 
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }

@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ZenCoding.Test
 {
@@ -67,10 +65,10 @@ namespace ZenCoding.Test
                                           "<a href=\"\"></a>" +
                                           "</li>" + Environment.NewLine +
                                           "<li class=\"item-4\">" +
-                                          "<a href=\"\"></a>"+
+                                          "<a href=\"\"></a>" +
                                           "</li>" + Environment.NewLine +
-                                          "<li class=\"item-5\">" + 
-                                          "<a href=\"\"></a>" + 
+                                          "<li class=\"item-5\">" +
+                                          "<a href=\"\"></a>" +
                                           "</li>" + Environment.NewLine +
                                       "</ul>" + Environment.NewLine +
                                   "</div>" + Environment.NewLine +

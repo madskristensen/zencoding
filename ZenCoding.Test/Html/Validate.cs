@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using P = ZenCoding.HtmlParser;
+using ZenParser = ZenCoding.HtmlParser;
 
 namespace ZenCoding.Test
 {
@@ -18,19 +18,19 @@ namespace ZenCoding.Test
         [TestMethod]
         public void Validate1()
         {
-            Assert.IsFalse(P.IsValid(string.Empty));
-            Assert.IsFalse(P.IsValid("ost ost"));
-            Assert.IsFalse(P.IsValid("div<ost"));
-            Assert.IsFalse(P.IsValid("div!"));
-            Assert.IsFalse(P.IsValid("div["));
-            Assert.IsFalse(P.IsValid("div[]]"));
-            Assert.IsFalse(P.IsValid("ul "));
-            Assert.IsFalse(P.IsValid("{display"));
-            Assert.IsFalse(P.IsValid("@for"));
-            Assert.IsFalse(P.IsValid("div{text}}"));
-            Assert.IsFalse(P.IsValid("div[text]]>div"));
-            Assert.IsFalse(P.IsValid("asp:literal"));
-            Assert.IsFalse(P.IsValid("ASP:LITERAL"));
+            Assert.IsFalse(ZenParser.IsValid(string.Empty));
+            Assert.IsFalse(ZenParser.IsValid("ost ost"));
+            Assert.IsFalse(ZenParser.IsValid("div<ost"));
+            Assert.IsFalse(ZenParser.IsValid("div!"));
+            Assert.IsFalse(ZenParser.IsValid("div["));
+            Assert.IsFalse(ZenParser.IsValid("div[]]"));
+            Assert.IsFalse(ZenParser.IsValid("ul "));
+            Assert.IsFalse(ZenParser.IsValid("{display"));
+            Assert.IsFalse(ZenParser.IsValid("@for"));
+            Assert.IsFalse(ZenParser.IsValid("div{text}}"));
+            Assert.IsFalse(ZenParser.IsValid("div[text]]>div"));
+            Assert.IsFalse(ZenParser.IsValid("asp:literal"));
+            Assert.IsFalse(ZenParser.IsValid("ASP:LITERAL"));
         }
 
         [TestMethod]
