@@ -142,15 +142,22 @@ namespace ZenCoding
 
         private static void AdjustImplicitTagNames(List<string> parts)
         {
+            var currentDefault = "div";
+
             for (int i = 0; i < parts.Count; i++)
             {
+                if (i != 0 && (parts[i - 1] == "ol" || parts[i - 1] == "ul") && parts[i][0] == '>')
+                    currentDefault = "li";
+                else if (currentDefault != "div" && parts[i][0] == '^')
+                    currentDefault = "div";
+
                 if (parts[i][0] == '#' || parts[i][0] == '.')
                 {
-                    parts[i] = "div" + parts[i];
+                    parts[i] = currentDefault + parts[i];
                 }
                 else if (_elem.Contains(parts[i][0]) && (parts[i][1] == '#' || parts[i][1] == '.'))
                 {
-                    parts[i] = parts[i].Insert(1, "div");
+                    parts[i] = parts[i].Insert(1, currentDefault);
                 }
             }
         }
