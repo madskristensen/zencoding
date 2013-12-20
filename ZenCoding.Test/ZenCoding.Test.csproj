@@ -58,6 +58,7 @@
     <Compile Include="Html\Attributes.cs" />
     <Compile Include="Html\ClimbUp.cs" />
     <Compile Include="Html\Anonymous.cs" />
+    <Compile Include="Html\ImplicitTags.cs" />
     <Compile Include="Html\Lorem.cs" />
     <Compile Include="Html\Formatting.cs" />
     <Compile Include="Html\Grouping.cs" />

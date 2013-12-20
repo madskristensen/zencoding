@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,7 +9,7 @@ namespace ZenCoding
 {
     public class LoremPixel : CustomHtmlImage
     {
-        private static readonly string _url = "http://lorempixel.com/";
+        private const string _url = "http://lorempixel.com/";
         private static readonly string[] _categories = new string[] { "abstract", "animals", "business", "cats", "city", "food", "nightlife", "fashion", "people", "nature", "sports", "technics", "transport" };
         private static readonly Regex _numberExtractor = new Regex("[^\\d]", RegexOptions.Compiled);
 
@@ -29,7 +30,7 @@ namespace ZenCoding
             string dimensions = "", category = "", text = "";
             string[] parts;
 
-            parts = loremPixelText.Split('-');
+            parts = loremPixelText == null ? new string[] { } : loremPixelText.Split('-');
 
             try
             {
@@ -49,8 +50,8 @@ namespace ZenCoding
 
                     if (IsInteger(components[0]) && IsInteger(components[1]))
                     {
-                        this.AssetWidth = int.Parse(components[0]);
-                        this.AssetHeight = int.Parse(components[1]);
+                        this.AssetWidth = int.Parse(components[0], CultureInfo.CurrentCulture);
+                        this.AssetHeight = int.Parse(components[1], CultureInfo.CurrentCulture);
 
                         if (parts.Length > 2)
                         {
@@ -80,9 +81,7 @@ namespace ZenCoding
                 }
             }
             catch
-            {
-
-            }
+            { }
 
             this.AssetWidth = this.AssetWidth % 1921;
             this.AssetHeight = this.AssetHeight % 1921;
@@ -111,7 +110,7 @@ namespace ZenCoding
             return builder.ToString();
         }
 
-        private string[] ExtractNumbers(string theValue)
+        private static string[] ExtractNumbers(string theValue)
         {
             return _numberExtractor.Split(theValue);
         }
@@ -120,7 +119,7 @@ namespace ZenCoding
         {
             try
             {
-                Convert.ToInt32(theValue);
+                Convert.ToInt32(theValue, CultureInfo.CurrentCulture);
                 return true;
             }
             catch

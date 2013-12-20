@@ -12,6 +12,9 @@ namespace ZenCoding
 
         protected override void Render(HtmlTextWriter writer)
         {
+            if (writer == null)
+                return;
+
             writer.Write(HtmlTextWriter.TagLeftChar + this.TagName);
             Attributes.Render(writer);
             writer.Write(HtmlTextWriter.SelfClosingTagEnd);

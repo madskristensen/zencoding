@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -14,54 +15,75 @@ namespace ZenCoding
 
         public static HtmlControl CloneElement(this HtmlControl element, int count)
         {
-            HtmlControl control = HtmlElementFactory.Create(element.TagName.Increment(count), element.GetType(), true);
+            if (element == null)
+                return null;
 
-            foreach (var attribute in element.Attributes.Keys)
+            using (HtmlControl control = HtmlElementFactory.Create(element.TagName.Increment(count), element.GetType(), true))
             {
-                string attr = (string)attribute;
-                control.Attributes[attr] = element.Attributes[attr].Increment(count);
-
-                if (attr == "class")
+                foreach (var attribute in element.Attributes.Keys)
                 {
-                    control.Attributes[attr] = control.Attributes[attr].Increment(count);
+                    string attr = (string)attribute;
+
+                    control.Attributes[attr] = element.Attributes[attr].Increment(count);
+
+                    if (attr == "class")
+                    {
+                        control.Attributes[attr] = control.Attributes[attr].Increment(count);
+                    }
                 }
-            }
 
-            if (!string.IsNullOrEmpty(element.ID))
-            {
-                control.ID = element.ID.Increment(count);
-            }
+                if (!string.IsNullOrEmpty(element.ID))
+                {
+                    control.ID = element.ID.Increment(count);
+                }
 
-            if (element.Controls.Count == 1)
-            {
-                LiteralControl literal = element.Controls[0] as LiteralControl;
-                if (literal != null)
-                    control.Controls.Add(new LiteralControl(literal.Text.Increment(count)));
-            }
+                if (element.Controls.Count == 1)
+                {
+                    LiteralControl literal = element.Controls[0] as LiteralControl;
+                    if (literal != null)
+                        control.Controls.Add(new LiteralControl(literal.Text.Increment(count)));
+                }
 
-            var lorem = element as LoremControl;
-            if (lorem != null)
-            {
-                lorem.InnerText = lorem.Generate(count);
-            }
+                var lorem = element as LoremControl;
+                if (lorem != null)
+                {
+                    lorem.InnerText = lorem.Generate(count);
+                }
 
-            return control;
+                return control;
+            }
         }
 
         public static string Increment(this string text, int count)
         {
             MatchCollection matches = _valueCounterRegex.Matches(text);
 
-            foreach (Match match in matches)
+            checked
             {
-                text = text.Replace(match.Value, (count + 1).ToString().PadLeft(match.Value.Length, '0'));
+                foreach (Match match in matches)
+                {
+                    text = text.Replace(match.Value, (count + 1).ToString(CultureInfo.CurrentCulture).PadLeft(match.Value.Length, '0'));
+                }
             }
 
             return text;
         }
 
-        public static HtmlControl Create(string tagName, Type type = null, bool isClone = false)
+        public static HtmlControl Create(string tagName)
         {
+            return Create(tagName, null, false);
+        }
+
+        public static HtmlControl Create(string tagName, Type type)
+        {
+            return Create(tagName, type, false);
+        }
+
+        public static HtmlControl Create(string tagName, Type type, bool isClone)
+        {
+            if (tagName == null)
+                return null;
+
             if (tagName.StartsWith("lorem", System.StringComparison.Ordinal) ||
                 (type == typeof(LoremControl) && isClone))
             {
@@ -78,26 +100,29 @@ namespace ZenCoding
                     return new EmptyHtmlControl();
 
                 case "a":
-                    var a = new CustomHtmlAnchor();
-                    a.Attributes["href"] = "";
-                    return a;
-
+                    using (var a = new CustomHtmlAnchor())
+                    {
+                        a.Attributes["href"] = "";
+                        return a;
+                    }
                 case "button":
                 case "btn":
                     return new HtmlButton();
 
                 case "input":
-                    CustomHtmlInput input = new CustomHtmlInput();
-                    input.Attributes["value"] = "";
-                    input.Attributes["type"] = "";
-                    return input;
-
+                    using (CustomHtmlInput input = new CustomHtmlInput())
+                    {
+                        input.Attributes["value"] = "";
+                        input.Attributes["type"] = "";
+                        return input;
+                    }
                 case "img":
-                    var img = new CustomHtmlImage();
-                    img.Attributes["src"] = string.Empty;
-                    img.Attributes["alt"] = string.Empty;
-                    return img;
-
+                    using (var img = new CustomHtmlImage())
+                    {
+                        img.Attributes["src"] = string.Empty;
+                        img.Attributes["alt"] = string.Empty;
+                        return img;
+                    }
                 case "source":
                 case "src":
                     return new HtmlGenericSelfClosing("source");
@@ -110,31 +135,35 @@ namespace ZenCoding
 
                 case "abbr":
                 case "acronym":
-                    HtmlGenericControl abbr = new HtmlGenericControl("acronym");
-                    abbr.Attributes["title"] = string.Empty;
-                    return abbr;
-
+                    using (HtmlGenericControl abbr = new HtmlGenericControl("acronym"))
+                    {
+                        abbr.Attributes["title"] = string.Empty;
+                        return abbr;
+                    }
                 case "area":
-                    BlockHtmlControl area = new BlockHtmlControl("area");
-                    area.Attributes["shape"] = string.Empty;
-                    area.Attributes["coords"] = string.Empty;
-                    area.Attributes["href"] = string.Empty;
-                    area.Attributes["alt"] = string.Empty;
-                    return area;
-
+                    using (BlockHtmlControl area = new BlockHtmlControl("area"))
+                    {
+                        area.Attributes["shape"] = string.Empty;
+                        area.Attributes["coords"] = string.Empty;
+                        area.Attributes["href"] = string.Empty;
+                        area.Attributes["alt"] = string.Empty;
+                        return area;
+                    }
                 case "iframe":
                 case "ifr":
-                    HtmlGenericControl iframe = new HtmlGenericControl("iframe");
-                    iframe.Attributes["src"] = string.Empty;
-                    iframe.Attributes["frameborder"] = "0";
-                    return iframe;
-
+                    using (HtmlGenericControl iframe = new HtmlGenericControl("iframe"))
+                    {
+                        iframe.Attributes["src"] = string.Empty;
+                        iframe.Attributes["frameborder"] = "0";
+                        return iframe;
+                    }
                 case "param":
-                    HtmlGenericSelfClosing param = new HtmlGenericSelfClosing("param");
-                    param.Attributes["name"] = string.Empty;
-                    param.Attributes["value"] = string.Empty;
-                    return param;
-
+                    using (HtmlGenericSelfClosing param = new HtmlGenericSelfClosing("param"))
+                    {
+                        param.Attributes["name"] = string.Empty;
+                        param.Attributes["value"] = string.Empty;
+                        return param;
+                    }
                 case "section":
                 case "sect":
                     return new BlockHtmlControl("section");
@@ -207,12 +236,13 @@ namespace ZenCoding
 
                 case "textarea":
                 case "tarea":
-                    var textarea = new CustomHtmlTextArea();
-                    textarea.ID = string.Empty;
-                    textarea.Attributes["cols"] = string.Empty;
-                    textarea.Attributes["rows"] = string.Empty;
-                    return textarea;
-
+                    using (var textarea = new CustomHtmlTextArea())
+                    {
+                        textarea.ID = string.Empty;
+                        textarea.Attributes["cols"] = string.Empty;
+                        textarea.Attributes["rows"] = string.Empty;
+                        return textarea;
+                    }
                 case "kg":
                     return new HtmlGenericControl("keygen");
 
@@ -238,37 +268,45 @@ namespace ZenCoding
 
         public static Control CreateDoctypes(string part, ref List<Control> current)
         {
-            ContentPlaceHolder root = new ContentPlaceHolder();
+            if (part == null)
+                return null;
 
-            string second = part.Substring(part.IndexOf(':') + 1);
-            root.Controls.Add(new LiteralControl(GetDoctype(second)));
-
-            HtmlControl html = HtmlElementFactory.Create("html");
-
-            if (!second.StartsWith("x"))
+            using (ContentPlaceHolder root = new ContentPlaceHolder())
             {
-                html.Attributes["lang"] = "en";
+                string second = part.Substring(part.IndexOf(':') + 1);
+                root.Controls.Add(new LiteralControl(GetDoctype(second)));
+
+                using (HtmlControl html = HtmlElementFactory.Create("html"))
+                {
+                    if (!second.StartsWith("x", StringComparison.Ordinal))
+                    {
+                        html.Attributes["lang"] = "en";
+                    }
+                    else
+                    {
+                        html.Attributes["xmlns"] = "http://www.w3.org/1999/xhtml";
+                        html.Attributes["xml:lang"] = "en";
+                    }
+
+                    root.Controls.Add(html);
+
+                    using (HtmlControl head = HtmlElementFactory.Create("head"))
+                    using (HtmlControl title = HtmlElementFactory.Create("title"))
+                    using (HtmlControl meta = ShortcutHelper.Parse("meta:utf"))
+                    {
+                        head.Controls.Add(title);
+                        head.Controls.Add(meta);
+                        html.Controls.Add(head);
+                    }
+
+                    using (HtmlControl body = HtmlElementFactory.Create("body"))
+                    {
+                        html.Controls.Add(body);
+                        current = new List<Control>() { body };
+                    }
+                    return root;
+                }
             }
-            else
-            {
-                html.Attributes["xmlns"] = "http://www.w3.org/1999/xhtml";
-                html.Attributes["xml:lang"] = "en";
-            }
-
-            root.Controls.Add(html);
-
-            HtmlControl head = HtmlElementFactory.Create("head");
-            HtmlControl title = HtmlElementFactory.Create("title");
-            HtmlControl meta = ShortcutHelper.Parse("meta:utf");
-            head.Controls.Add(title);
-            head.Controls.Add(meta);
-            html.Controls.Add(head);
-
-            HtmlControl body = HtmlElementFactory.Create("body");
-            html.Controls.Add(body);
-            current = new List<Control>() { body };
-
-            return root;
         }
 
         private static string GetDoctype(string key)

@@ -6,7 +6,7 @@ namespace ZenCoding
     {
         public string Parse(string zenSyntax)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(zenSyntax);
         }
     }
 }

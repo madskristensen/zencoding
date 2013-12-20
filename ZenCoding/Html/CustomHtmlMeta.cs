@@ -12,6 +12,9 @@ namespace ZenCoding
 
         protected override void Render(HtmlTextWriter writer)
         {
+            if (writer == null)
+                return;
+
             writer.Write(Environment.NewLine);
             base.Render(writer);
             writer.Write(Environment.NewLine);

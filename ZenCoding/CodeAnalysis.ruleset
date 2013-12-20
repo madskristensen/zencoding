@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="ZenCoding Rule Set" Description=" " ToolsVersion="12.0">
+  <IncludeAll Action="Warning" />
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA2202" Action="None" />
+  </Rules>
+</RuleSet>
