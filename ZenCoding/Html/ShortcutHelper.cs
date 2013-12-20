@@ -2,7 +2,7 @@
 
 namespace ZenCoding
 {
-    class ShortcutHelper
+    static class ShortcutHelper
     {
         public static HtmlControl Parse(string zenSyntax)
         {
@@ -11,10 +11,12 @@ namespace ZenCoding
             if (args.Length != 2)
                 return null;
 
-            HtmlControl element = HtmlElementFactory.Create(args[0]);
-            AddAttributes(element, args[1]);
+            using (HtmlControl element = HtmlElementFactory.Create(args[0]))
+            {
+                AddAttributes(element, args[1]);
 
-            return element;
+                return element;
+            }
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -19,7 +20,7 @@ namespace ZenCoding
 
         public static bool IsValid(string zenSyntax)
         {
-            if (zenSyntax.Length == 0 || zenSyntax.StartsWith("asp:", StringComparison.OrdinalIgnoreCase))
+            if (zenSyntax == null || zenSyntax.Length == 0 || zenSyntax.StartsWith("asp:", StringComparison.OrdinalIgnoreCase))
                 return false;
 
             int indexSpace = zenSyntax.IndexOf(' ');
@@ -91,30 +92,43 @@ namespace ZenCoding
 
             //Place the parsed groups on their respective positions
             for (--groupId; groupId >= 0; --groupId)
-                result = result.Replace(string.Format("<span class=\"__group{0}\">", groupId), resolvedGroups[groupId]);
+                result = result.Replace(string.Format(CultureInfo.CurrentCulture, "<span class=\"__group{0}\">", groupId), resolvedGroups[groupId]);
 
             return result;
         }
 
-        public string ParseGroup(string zenSyntax)
+        public static string ParseGroup(string zenSyntax)
         {
             if (!IsValid(zenSyntax))
                 return string.Empty;
 
-            Control root = new Control();
-            List<string> parts = GetSubParts(zenSyntax, _elem);
+            Control root = null;
 
-            AdjustImplicitTagNames(parts);
+            try
+            {
+                root = new Control();
+                List<string> parts = GetSubParts(zenSyntax, _elem);
 
-            if (!IsValidHtmlElements(parts))
-                return string.Empty;
+                AdjustImplicitTagNames(parts);
 
-            List<Control> current = new List<Control>() { root };
+                if (!IsValidHtmlElements(parts))
+                    return string.Empty;
 
-            HandleDoctypes(ref root, parts, ref current);
-            BuildControlTree(parts, current);
+                List<Control> current = new List<Control>() { root };
 
-            return RenderControl(root);
+                HandleDoctypes(ref root, parts, ref current);
+                if (root == null) return null;
+                BuildControlTree(parts, current);
+
+                return RenderControl(root);
+            }
+            finally
+            {
+                if (root != null)
+                {
+                    root.Dispose();
+                }
+            }
         }
 
         private static void HandleDoctypes(ref Control root, List<string> parts, ref List<Control> current)
@@ -141,7 +155,7 @@ namespace ZenCoding
             }
         }
 
-        private bool IsValidHtmlElements(List<string> parts)
+        private static bool IsValidHtmlElements(List<string> parts)
         {
             foreach (string part in parts)
             {
@@ -158,8 +172,8 @@ namespace ZenCoding
 
                 if (firstElement.Length > 0 &&
                     !ValidElements.List.Contains(firstElement) &&
-                    !firstElement.StartsWith("lorem") &&
-                    !firstElement.StartsWith("pix") &&
+                    !firstElement.StartsWith("lorem", StringComparison.Ordinal) &&
+                    !firstElement.StartsWith("pix", StringComparison.Ordinal) &&
                     firstElement != "h$")
 
                     return false;
@@ -168,7 +182,7 @@ namespace ZenCoding
             return true;
         }
 
-        private void BuildControlTree(List<string> parts, List<Control> current)
+        private static void BuildControlTree(List<string> parts, List<Control> current)
         {
             foreach (string part in parts)
             {
@@ -178,7 +192,7 @@ namespace ZenCoding
 
                 for (int i = 0; i < count; i++)
                 {
-                    HtmlControl element = GenerateElement(part, name, i);
+                    HtmlControl element = GenerateElement(part, name);
 
                     for (int c = 0; c < current.Count; c++)
                     {
@@ -227,13 +241,13 @@ namespace ZenCoding
             parent.Controls.Add(clone);
         }
 
-        private HtmlControl GenerateElement(string part, string name, int i)
+        private static HtmlControl GenerateElement(string part, string name)
         {
             HtmlControl element = null;
 
             if (!_shortcuts.IsMatch(name))
             {
-                element = CreateElementWithAttributes(part, name, i);
+                element = CreateElementWithAttributes(part, name);
             }
             else
             {
@@ -242,37 +256,39 @@ namespace ZenCoding
             return element;
         }
 
-        private HtmlControl CreateElementWithAttributes(string part, string name, int count)
+        private static HtmlControl CreateElementWithAttributes(string part, string name)
         {
-            HtmlControl element = HtmlElementFactory.Create(name);
-            List<string> subParts = GetSubParts(part, _attr);
-
-            foreach (string subPart in subParts)
+            using (HtmlControl element = HtmlElementFactory.Create(name))
             {
-                // Class
-                if (subPart[0] == '.')
-                {
-                    AddClass(element, subPart, count);
-                }
-                // ID
-                else if (subPart[0] == '#')
-                {
-                    AddId(element, subPart, count);
-                }
-                else if (subPart[0] == '[')
-                {
-                    AddAttributes(element, subPart, count);
-                }
-                else if (subPart[0] == '{')
-                {
-                    AddInnerText(element, subPart, count);
-                }
-            }
+                List<string> subParts = GetSubParts(part, _attr);
 
-            return element;
+                foreach (string subPart in subParts)
+                {
+                    // Class
+                    if (subPart[0] == '.')
+                    {
+                        AddClass(element, subPart);
+                    }
+                    // ID
+                    else if (subPart[0] == '#')
+                    {
+                        AddId(element, subPart);
+                    }
+                    else if (subPart[0] == '[')
+                    {
+                        AddAttributes(element, subPart);
+                    }
+                    else if (subPart[0] == '{')
+                    {
+                        AddInnerText(element, subPart);
+                    }
+                }
+
+                return element;
+            }
         }
 
-        private void AddInnerText(HtmlControl element, string subPart, int i)
+        private static void AddInnerText(HtmlControl element, string subPart)
         {
             string clean = subPart.Substring(1, subPart.IndexOf('}') - 1);
 
@@ -281,7 +297,7 @@ namespace ZenCoding
 
         }
 
-        private void AddAttributes(HtmlControl element, string attribute, int count)
+        private static void AddAttributes(HtmlControl element, string attribute)
         {
             int start = attribute.IndexOf('[');
             int end = attribute.IndexOf(']');
@@ -298,8 +314,8 @@ namespace ZenCoding
                     int doubleCount = part.Count(c => c == '"');
 
                     if (((singleCount > 1 || doubleCount > 1) && !part.Contains("=")) ||
-                        ((doubleCount == 1) && part.EndsWith("\"")) ||
-                        ((singleCount == 1) && part.EndsWith("'")))
+                        ((doubleCount == 1) && part.EndsWith("\"", StringComparison.Ordinal)) ||
+                        ((singleCount == 1) && part.EndsWith("'", StringComparison.Ordinal)))
                     {
                         parts[i - 1] += " " + part;
                         parts.RemoveAt(i);
@@ -332,7 +348,7 @@ namespace ZenCoding
             }
         }
 
-        private void AddId(HtmlControl element, string part, int count)
+        private static void AddId(HtmlControl element, string part)
         {
             int index = part.IndexOf('*');
             string clean = part;
@@ -345,7 +361,7 @@ namespace ZenCoding
             element.ID = clean.TrimStart(_attr);
         }
 
-        private void AddClass(HtmlControl element, string className, int count)
+        private static void AddClass(HtmlControl element, string className)
         {
             string current = element.Attributes["class"];
             string clean = className.TrimStart(_attr);
@@ -360,7 +376,7 @@ namespace ZenCoding
             element.Attributes["class"] = element.Attributes["class"];
         }
 
-        private int GetCountAndName(string part, out string cleanPart, char[] symbols)
+        private static int GetCountAndName(string part, out string cleanPart, char[] symbols)
         {
             int index = part.IndexOf('*');
             int count = 1;
@@ -391,7 +407,7 @@ namespace ZenCoding
             return count;
         }
 
-        private List<string> GetSubParts(string zenSyntax, char[] symbols)
+        private static List<string> GetSubParts(string zenSyntax, char[] symbols)
         {
             List<string> parts = GetParts(zenSyntax, symbols);
 
@@ -409,7 +425,7 @@ namespace ZenCoding
             return parts;
         }
 
-        private List<string> GetParts(string zenSyntax, char[] symbols)
+        private static List<string> GetParts(string zenSyntax, char[] symbols)
         {
             List<string> parts = new List<string>();
             int index = 0;
@@ -479,7 +495,10 @@ namespace ZenCoding
 
         public static string RenderControl(Control control)
         {
-            using (StringWriter stringWriter = new StringWriter())
+            if (control == null)
+                return null;
+
+            using (StringWriter stringWriter = new StringWriter(CultureInfo.InvariantCulture))
             using (XhtmlTextWriter htmlTextWriter = new XhtmlTextWriter(stringWriter))
             {
                 control.RenderControl(htmlTextWriter);

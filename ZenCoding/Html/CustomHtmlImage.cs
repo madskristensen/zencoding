@@ -13,6 +13,9 @@ namespace ZenCoding.Html
 
         protected override void RenderBeginTag(HtmlTextWriter writer)
         {
+            if (writer == null)
+                return;
+
             if (this.Controls.Count > 0 && this.Controls[0].Controls.Count > 0 || this.Controls.Count > 1
                 || (this.Parent != null && (this.Parent.Controls.Count > 0 && this.Parent.Controls[0].Controls.Count > 1 || this.Parent.Controls.Count > 1)))
             {

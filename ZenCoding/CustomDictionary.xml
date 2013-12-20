@@ -1,0 +1,26 @@
+﻿<Dictionary>
+  <Words>
+    <Recognized>
+      <Word>Lorem</Word>
+      <Word>Doctypes</Word>
+    </Recognized>
+    <Unrecognized>
+      <Word></Word>
+    </Unrecognized>
+    <Deprecated>
+      <Term PreferredAlternate=""></Term>
+    </Deprecated>
+    <Compound>
+      <Term CompoundAlternate=""></Term>
+    </Compound>
+    <DiscreteExceptions>
+      <Term></Term>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>HTML</Acronym>
+      <Acronym>CSS</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

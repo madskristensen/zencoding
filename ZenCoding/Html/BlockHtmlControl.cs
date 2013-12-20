@@ -13,8 +13,12 @@ namespace ZenCoding
 
         protected override void RenderBeginTag(HtmlTextWriter writer)
         {
+            if (writer == null)
+                return;
+
             writer.Write(Environment.NewLine);
             base.RenderBeginTag(writer);
+
             if (this.Controls.Count > 0 && this.Controls[0].Controls.Count > 1 || this.Controls.Count > 1)
             {
                 writer.WriteLine(Environment.NewLine);
@@ -23,6 +27,9 @@ namespace ZenCoding
 
         protected override void RenderEndTag(HtmlTextWriter writer)
         {
+            if (writer == null)
+                return;
+
             if (this.Controls.Count > 0 && this.Controls[0].Controls.Count > 1 || this.Controls.Count > 1)
             {
                 writer.WriteLine(Environment.NewLine);
