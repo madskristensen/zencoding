@@ -16,7 +16,7 @@ namespace ZenCoding
         {
             int length = 30;
 
-            if (int.TryParse(loremText.Replace("lorem", string.Empty), out length))
+            if (loremText != null && int.TryParse(loremText.Replace("lorem", string.Empty), out length))
             {
                 _length = length;
             }
@@ -33,16 +33,19 @@ namespace ZenCoding
 
         public string Generate(int count)
         {
-            var clean = _array.Skip(Length * (count + 1));
-
-            if (Length > _array.Length)
+            checked
             {
-                clean = _array;
+                var clean = _array.Skip(Length * (count + 1));
+
+                if (Length > _array.Length)
+                {
+                    clean = _array;
+                }
+
+                string result = string.Join(" ", clean.Take(Length)).Trim();
+
+                return Normalize(result);
             }
-
-            string result = string.Join(" ", clean.Take(Length)).Trim();
-
-            return Normalize(result);
         }
 
         private static string Normalize(string result)
@@ -53,7 +56,7 @@ namespace ZenCoding
                 result = first + result.Substring(1);
                 result = result.TrimEnd(',', ';');
 
-                if (!result.EndsWith("."))
+                if (!result.EndsWith(".", StringComparison.Ordinal))
                     result += ".";
             }
 
@@ -62,6 +65,9 @@ namespace ZenCoding
 
         protected override void Render(HtmlTextWriter writer)
         {
+            if (writer == null)
+                return;
+
             base.RenderChildren(writer);
             writer.Write(Environment.NewLine);
         }

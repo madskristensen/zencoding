@@ -5,15 +5,18 @@ namespace ZenCoding
     {
         public string Parse(string zenSyntax, ZenType type)
         {
+            if (zenSyntax == null)
+                return null;
+
             switch (type)
             {
-                case ZenType.CSS:
-                    CssParser cssParser = new CssParser();
-                    return cssParser.Parse(zenSyntax.Trim());
-
                 case ZenType.HTML:
                     HtmlParser htmlParser = new HtmlParser();
                     return htmlParser.Parse(zenSyntax.Trim());
+
+                case ZenType.CSS:
+                    CssParser cssParser = new CssParser();
+                    return cssParser.Parse(zenSyntax.Trim());
             }
 
             return null;
@@ -22,7 +25,7 @@ namespace ZenCoding
 
     public enum ZenType
     {
-        CSS,
-        HTML
+        HTML,
+        CSS
     }
 }
