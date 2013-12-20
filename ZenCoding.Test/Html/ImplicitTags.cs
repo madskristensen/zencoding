@@ -97,5 +97,17 @@ namespace ZenCoding.Test.Html
 
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }
+
+        [TestMethod]
+        public void EmphasizedAndSpan()
+        {
+            string result = _parser.Parse("em>.class-name", ZenType.HTML);
+            string expected = "<em>" +
+                              "<span class=\"class-name\">" +
+                              "</span>" +
+                              "</em>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
     }
 }

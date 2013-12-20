@@ -148,6 +148,8 @@ namespace ZenCoding
             {
                 if (i != 0 && (parts[i - 1] == "ol" || parts[i - 1] == "ul") && parts[i][0] == '>')
                     currentDefault = "li";
+                if (i != 0 && parts[i - 1] == "em" && parts[i][0] == '>')
+                    currentDefault = "span";
                 else if (currentDefault != "div" && parts[i][0] == '^')
                     currentDefault = "div";
 
