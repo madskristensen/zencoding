@@ -109,5 +109,43 @@ namespace ZenCoding.Test.Html
 
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }
+
+        [TestMethod]
+        public void TableAndRow()
+        {
+            string result = _parser.Parse("table>.class-name", ZenType.HTML);
+            string expected = "<table>" +
+                              "<tr class=\"class-name\">" +
+                              "</tr>" +
+                              "</table>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
+        [TestMethod]
+        public void RowAndData()
+        {
+            string result = _parser.Parse("tr>.class-name", ZenType.HTML);
+            string expected = "<tr>" +
+                              "<td class=\"class-name\">" +
+                              "</td>" +
+                              "</tr>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
+        [TestMethod]
+        public void TableAndRowAndData()
+        {
+            string result = _parser.Parse("table>.row-class-name>.data-class-name", ZenType.HTML);
+            string expected = "<table>" +
+                              "<tr class=\"row-class-name\">" +
+                              "<td class=\"data-class-name\">" +
+                              "</td>" +
+                              "</tr>" +
+                              "</table>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
     }
 }
