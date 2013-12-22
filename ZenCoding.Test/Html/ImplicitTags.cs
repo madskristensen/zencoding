@@ -147,5 +147,25 @@ namespace ZenCoding.Test.Html
 
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }
+
+        [TestMethod]
+        public void TableAndRowColumnsAndNestedMarkup()
+        {
+            string result = _parser.Parse("table>.a>.b>.c>.d>.e.f.g", ZenType.HTML);
+            string expected = "<table>" +
+                              "<tr class=\"a\">" +
+                              "<td class=\"b\">" +
+                              "<div class=\"c\">" +
+                              "<div class=\"d\">" +
+                              "<div class=\"e f g\">" +
+                              "</div>" +
+                              "</div>" +
+                              "</div>" +
+                              "</td>" +
+                              "</tr>" +
+                              "</table>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
     }
 }

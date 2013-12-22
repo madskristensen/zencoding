@@ -154,7 +154,7 @@ namespace ZenCoding
                     currentDefault = "tr";
                 else if (i != 0 && (parts[i - 1] == "tr" || parts[i - 1].StartsWith(">tr")) && parts[i][0] == '>')
                     currentDefault = "td";
-                else if (currentDefault != "div" && parts[i][0] == '^')
+                else if ((parts[i][0] == '>' && currentDefault == "td") || (currentDefault != "div" && parts[i][0] == '^'))
                     currentDefault = "div";
 
                 if (parts[i][0] == '#' || parts[i][0] == '.')
