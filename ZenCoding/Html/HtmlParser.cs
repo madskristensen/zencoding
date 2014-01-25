@@ -197,8 +197,9 @@ namespace ZenCoding
 
         private static void BuildControlTree(List<string> parts, List<Control> current)
         {
-            foreach (string part in parts)
+            for (int j = 0; j < parts.Count; j++)
             {
+                var part = parts[j];
                 string name;
                 int count = GetCountAndName(part, out name, _attr);
                 List<Control> list = new List<Control>();
@@ -218,7 +219,9 @@ namespace ZenCoding
                         if (part[0] == '+')
                         {
                             control.Parent.Controls.Add(clone);
-                            c = current.Count;
+
+                            if (j > 0 && char.IsDigit(parts[j - 1].Last()))
+                                c = current.Count;
                         }
                         else if (part[0] == '^')
                         {

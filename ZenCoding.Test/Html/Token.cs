@@ -61,5 +61,23 @@ namespace ZenCoding.Test
 
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }
+
+        [TestMethod]
+        public void TokenNestedMultipleChildren()
+        {
+            string result = _parser.Parse("ul>li*2>span+input", ZenType.HTML);
+            string expected = "<ul>" +
+                                  "<li>" +
+                                      "<span></span>" +
+                                      "<input type=\"\" value=\"\" />" +
+                                  "</li>" +
+                                  "<li>" +
+                                  "<span></span>" +
+                                      "<input type=\"\" value=\"\" />" +
+                                   "</li>" +
+                              "</ul>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
     }
 }
