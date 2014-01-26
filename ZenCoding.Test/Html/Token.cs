@@ -79,5 +79,54 @@ namespace ZenCoding.Test
 
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }
+
+        [TestMethod]
+        public void TokenNestedMultipleChildrenComplex()
+        {
+            string result = _parser.Parse("ul[data-bind=\"foreach:customers\"]>li*3>span{Caption $$}*4+input[type=text data-bind=\"value:$$\"]+ul[data-bind=\"foreach:customers\"]>li*4>span{Caption $$}+input[type=text data-bind=\"value:$$\"]", ZenType.HTML);
+            string expected = "<ul data-bind=\"foreach:customers\">" +
+                                "<li>" +
+                                    "<span>Caption 01</span>" +
+                                    "<span>Caption 02</span>" +
+                                    "<span>Caption 03</span>" +
+                                    "<span>Caption 04</span>" +
+                                    "<input type=\"text\" value=\"\" data-bind=\"value:01\" />" +
+                                    "<ul data-bind=\"foreach:customers\">" +
+                                        "<li><span>Caption 01</span><input type=\"text\" value=\"\" data-bind=\"value:01\" /></li>" +
+                                        "<li><span>Caption 02</span><input type=\"text\" value=\"\" data-bind=\"value:02\" /></li>" +
+                                        "<li><span>Caption 03</span><input type=\"text\" value=\"\" data-bind=\"value:03\" /></li>" +
+                                        "<li><span>Caption 04</span><input type=\"text\" value=\"\" data-bind=\"value:04\" /></li>" +
+                                    "</ul>" +
+                                "</li>" +
+                                "<li>" +
+                                    "<span>Caption 01</span>" +
+                                    "<span>Caption 02</span>" +
+                                    "<span>Caption 03</span>" +
+                                    "<span>Caption 04</span>" +
+                                    "<input type=\"text\" value=\"\" data-bind=\"value:02\" />" +
+                                    "<ul data-bind=\"foreach:customers\">" +
+                                        "<li><span>Caption 01</span><input type=\"text\" value=\"\" data-bind=\"value:01\" /></li>" +
+                                        "<li><span>Caption 02</span><input type=\"text\" value=\"\" data-bind=\"value:02\" /></li>" +
+                                        "<li><span>Caption 03</span><input type=\"text\" value=\"\" data-bind=\"value:03\" /></li>" +
+                                        "<li><span>Caption 04</span><input type=\"text\" value=\"\" data-bind=\"value:04\" /></li>" +
+                                    "</ul>" +
+                                "</li>" +
+                                "<li>" +
+                                    "<span>Caption 01</span>" +
+                                    "<span>Caption 02</span>" +
+                                    "<span>Caption 03</span>" +
+                                    "<span>Caption 04</span>" +
+                                    "<input type=\"text\" value=\"\" data-bind=\"value:03\" />" +
+                                    "<ul data-bind=\"foreach:customers\">" +
+                                        "<li><span>Caption 01</span><input type=\"text\" value=\"\" data-bind=\"value:01\" /></li>" +
+                                        "<li><span>Caption 02</span><input type=\"text\" value=\"\" data-bind=\"value:02\" /></li>" +
+                                        "<li><span>Caption 03</span><input type=\"text\" value=\"\" data-bind=\"value:03\" /></li>" +
+                                        "<li><span>Caption 04</span><input type=\"text\" value=\"\" data-bind=\"value:04\" /></li>" +
+                                    "</ul>" +
+                                "</li>" +
+                            "</ul>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
     }
 }
