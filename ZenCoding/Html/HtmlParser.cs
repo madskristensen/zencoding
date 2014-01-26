@@ -117,8 +117,10 @@ namespace ZenCoding
                 List<Control> current = new List<Control>() { root };
 
                 HandleDoctypes(ref root, parts, ref current);
+
                 if (root == null) return null;
-                BuildControlTree(parts, current);
+
+                BuildControlTree(CloneStack<string>(parts), current[0], -1);
 
                 return RenderControl(root);
             }
@@ -195,66 +197,81 @@ namespace ZenCoding
             return true;
         }
 
-        private static void BuildControlTree(List<string> parts, List<Control> current)
+        private static void BuildControlTree(Stack<string> parts, Control control, int nestedCounter)
         {
-            for (int j = 0; j < parts.Count; j++)
+            if (!parts.Any())
+                return;
+
+            string name;
+            var part = parts.Pop();
+            int count = GetCountAndName(part, out name, _attr);
+            var htmlControl = GenerateElement(part, name);
+            bool foundMaintainLevelSemaphore = false;
+            bool foundLevelUpSemaphore = false;
+
+            for (int i = 0; i < count; ++i)
             {
-                var part = parts[j];
-                string name;
-                int count = GetCountAndName(part, out name, _attr);
-                List<Control> list = new List<Control>();
+                var clone = htmlControl.CloneElement(count > 1 || nestedCounter == -1 ? i : nestedCounter);
+                clone.SkinID = Guid.NewGuid().ToString();
+                control.Controls.Add(clone);
 
-                for (int i = 0; i < count; i++)
+                if (parts.Any() && parts.Peek()[0] == '+')
                 {
-                    HtmlControl element = GenerateElement(part, name);
+                    foundMaintainLevelSemaphore = true;
+                }
+                else if (parts.Any() && parts.Peek()[0] == '^')
+                {
+                    foundLevelUpSemaphore = true;
+                }
+                else // must be ">" meaning; going down!
+                {
+                    if (count > 1) nestedCounter = i;
 
-                    for (int c = 0; c < current.Count; c++)
-                    {
-                        int increment = current.Count == 1 ? i : c;
+                    BuildControlTree(CloneStack<string>(parts), FindControlBySkinId(control, clone.SkinID), nestedCounter);
 
-                        Control control = current[c];
+                    nestedCounter = -1;
+                }
+            }
 
-                        var clone = element.CloneElement(increment);
+            if (foundMaintainLevelSemaphore)
+            {
+                BuildControlTree(CloneStack<string>(parts), control, nestedCounter);
+            }
+            else if (foundLevelUpSemaphore)
+            {
+                Control parent = control;
 
-                        if (part[0] == '+')
-                        {
-                            control.Parent.Controls.Add(clone);
+                for (int j = 0; j < parts.Peek().Count(a => a == '^'); j++)
+                {
+                    if (parent.Parent == null)
+                        break;
 
-                            if (j > 0 && char.IsDigit(parts[j - 1].Last()))
-                                c = current.Count;
-                        }
-                        else if (part[0] == '^')
-                        {
-                            AdjustClimbUp(part, control, clone);
-                            c = current.Count;
-                        }
-                        else
-                        {
-                            control.Controls.Add(clone);
-                        }
-
-                        list.Add(clone);
-                    }
+                    parent = parent.Parent;
                 }
 
-                current = list;
+                BuildControlTree(CloneStack<string>(parts), parent, nestedCounter);
             }
+
+            nestedCounter = -1;
         }
 
-        private static void AdjustClimbUp(string part, Control control, HtmlControl clone)
+        private static Stack<T> CloneStack<T>(IEnumerable<T> collection)
         {
-            Control parent = control;
-            int climbs = part.Count(a => a == '^');
+            return new Stack<T>(collection.Reverse<T>());
+        }
 
-            for (int i = 0; i <= climbs; i++)
+        private static Control FindControlBySkinId(Control root, string id)
+        {
+            if (root.SkinID == id) return root;
+
+            foreach (Control c in root.Controls)
             {
-                if (parent.Parent == null)
-                    break;
+                Control t = FindControlBySkinId(c, id);
 
-                parent = parent.Parent;
+                if (t != null) return t;
             }
 
-            parent.Controls.Add(clone);
+            return null;
         }
 
         private static HtmlControl GenerateElement(string part, string name)

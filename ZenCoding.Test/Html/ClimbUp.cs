@@ -99,7 +99,6 @@ namespace ZenCoding.Test
             string result = _parser.Parse("div>ul>li^^p", ZenType.HTML);
             string expected = "<div><ul><li></li></ul></div><p></p>";
 
-
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }
     }
