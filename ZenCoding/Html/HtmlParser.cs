@@ -189,6 +189,7 @@ namespace ZenCoding
                     !ValidElements.List.Contains(firstElement) &&
                     !firstElement.StartsWith("lorem", StringComparison.Ordinal) &&
                     !firstElement.StartsWith("pix", StringComparison.Ordinal) &&
+                    !firstElement.StartsWith("place", StringComparison.Ordinal) &&
                     firstElement != "h$")
 
                     return false;

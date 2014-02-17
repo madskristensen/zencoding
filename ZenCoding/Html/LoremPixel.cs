@@ -1,36 +1,30 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using ZenCoding.Html;
 
 namespace ZenCoding
 {
-    public class LoremPixel : CustomHtmlImage
+    public class LoremPixel : PixelBase
     {
         private const string _url = "http://lorempixel.com/";
         private static readonly string[] _categories = new string[] { "abstract", "animals", "business", "cats", "city", "food", "nightlife", "fashion", "people", "nature", "sports", "technics", "transport" };
-        private static readonly Regex _numberExtractor = new Regex("[^\\d]", RegexOptions.Compiled);
 
-        public int AssetWidth { get; set; }
-        public int AssetHeight { get; set; }
         public string Category { get; set; }
         public string Text { get; set; }
         public bool IsGray { get; set; }
 
-
-        public LoremPixel(string loremPixelText)
+        public LoremPixel(string pixText)
         {
-            this.AssetWidth = this.AssetHeight = 30;
-            this.Category = "";
-            this.Text = "";
-            this.IsGray = false;
+            Generate(pixText);
+        }
 
+        public override void Generate(string pixText)
+        {
             string dimensions = "", category = "", text = "";
             string[] parts;
 
-            parts = loremPixelText == null ? new string[] { } : loremPixelText.Split('-');
+            parts = pixText == null ? new string[] { } : pixText.Split('-');
 
             try
             {
@@ -46,36 +40,30 @@ namespace ZenCoding
                         dimensions = parts[1];
                     }
 
-                    string[] components = ExtractNumbers(dimensions);
+                    SetDimensions(dimensions);
 
-                    if (IsInteger(components[0]) && IsInteger(components[1]))
+                    if (parts.Length > 2)
                     {
-                        this.AssetWidth = int.Parse(components[0], CultureInfo.CurrentCulture);
-                        this.AssetHeight = int.Parse(components[1], CultureInfo.CurrentCulture);
-
-                        if (parts.Length > 2)
+                        if (this.IsGray)
                         {
-                            if (this.IsGray)
+                            category = parts[3];
+                            if (parts.Length > 4)
                             {
-                                category = parts[3];
-                                if (parts.Length > 4)
-                                {
-                                    text = parts[4];
-                                }
+                                text = parts[4];
                             }
-                            else
+                        }
+                        else
+                        {
+                            category = parts[2];
+                            if (parts.Length > 3)
                             {
-                                category = parts[2];
-                                if (parts.Length > 3)
-                                {
-                                    text = parts[3];
-                                }
+                                text = parts[3];
                             }
-                            if (_categories.Contains(category))
-                            {
-                                this.Category = category;
-                                this.Text = text;
-                            }
+                        }
+                        if (_categories.Contains(category))
+                        {
+                            this.Category = category;
+                            this.Text = text;
                         }
                     }
                 }
@@ -86,48 +74,37 @@ namespace ZenCoding
             this.AssetWidth = this.AssetWidth % 1921;
             this.AssetHeight = this.AssetHeight % 1921;
 
-            this.Src = GetLoremPixelPath();
+            SetPath();
         }
 
-        private string GetLoremPixelPath()
+        protected override void Initialize()
+        {
+            this.AssetWidth = this.AssetHeight = 30;
+            this.Category = "";
+            this.Text = "";
+            this.IsGray = false;
+        }
+
+        protected override void SetPath()
         {
             Random random = new Random();
             int randomInt = random.Next(0, 10);
             StringBuilder builder = new StringBuilder(_url);
+
             if (this.IsGray)
-            {
                 builder.Append("g/");
-            }
+
             builder.Append(this.AssetWidth).Append("/").Append(this.AssetHeight).Append("/");
+
             if (!String.IsNullOrEmpty(this.Category))
             {
                 builder.Append(this.Category).Append("/").Append(randomInt).Append("/");
+
                 if (!String.IsNullOrEmpty(this.Text))
-                {
                     builder.Append(this.Text).Append("/");
-                }
             }
-            return builder.ToString();
+
+            this.Src = builder.ToString();
         }
-
-        private static string[] ExtractNumbers(string theValue)
-        {
-            return _numberExtractor.Split(theValue);
-        }
-
-        public static bool IsInteger(string theValue)
-        {
-            try
-            {
-                Convert.ToInt32(theValue, CultureInfo.CurrentCulture);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-
     }
 }
