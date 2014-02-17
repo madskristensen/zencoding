@@ -35,7 +35,7 @@ namespace ZenCoding.Test
         public void PlaceHoldText()
         {
             string result = _parser.Parse("place-120x1879-jpeg-t=Some%20Random%20Text=", ZenType.HTML);
-            string expected = "http://placehold.it/120x1879/jpeg/&text=Some%20Random%20Text="; // Text is: "Some Random Text="
+            string expected = "http://placehold.it/120x1879/jpeg&text=Some%20Random%20Text="; // Text is: "Some Random Text="
 
             StringAssert.Contains(result, expected);
         }
@@ -45,7 +45,7 @@ namespace ZenCoding.Test
         {
             string result = _parser.Parse("place-999x1920-EEE-FFFFFF-t=Some%20Random%20Text!", ZenType.HTML);
 
-            string expected = "http://placehold.it/999x1920/EEE/FFFFFF/&text=Some%20Random%20Text!";
+            string expected = "http://placehold.it/999x1920/EEE/FFFFFF&text=Some%20Random%20Text!";
 
             StringAssert.Contains(result, expected);
         }
@@ -54,7 +54,7 @@ namespace ZenCoding.Test
         public void PlaceHoldOverflowedDimensions()
         {
             string result = _parser.Parse("place-20000x3599-t=SomeRandomText", ZenType.HTML);
-            string expected = "<img src=\"http://placehold.it/790x1678/&text=SomeRandomText\" alt=\"\" />"; // the allowed bound is 0-1920
+            string expected = "<img src=\"http://placehold.it/3560x678&text=SomeRandomText\" alt=\"\" />"; // the allowed bound is 0-1920
 
             Assert.AreEqual(expected, result);
         }

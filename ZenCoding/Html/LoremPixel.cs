@@ -18,67 +18,60 @@ namespace ZenCoding
             Generate(pixText);
         }
 
-        public override void Generate(string pixText)
-        {
-            string dimensions = "", category = "", text = "";
-            string[] parts;
-
-            parts = pixText == null ? new string[] { } : pixText.Split('-');
-
-            if (parts.Length > 1)
-            {
-                if (parts[1].Equals("g"))
-                {
-                    this.IsGray = true;
-
-                    if (parts.Length > 2)
-                        dimensions = parts[2];
-                }
-                else
-                {
-                    dimensions = parts[1];
-                }
-
-                SetDimensions(dimensions);
-
-                if (parts.Length > 2)
-                {
-                    if (this.IsGray)
-                    {
-                        category = parts[3];
-                        if (parts.Length > 4)
-                        {
-                            text = parts[4];
-                        }
-                    }
-                    else
-                    {
-                        category = parts[2];
-                        if (parts.Length > 3)
-                        {
-                            text = parts[3];
-                        }
-                    }
-                    if (_categories.Contains(category))
-                    {
-                        this.Category = category;
-                        this.Text = text;
-                    }
-                }
-            }
-
-            this.AssetWidth = this.AssetWidth % 1921;
-            this.AssetHeight = this.AssetHeight % 1921;
-
-            SetPath();
-        }
-
         protected override void Initialize()
         {
-            this.AssetWidth = this.AssetHeight = 30;
             this.Category = "";
             this.Text = "";
             this.IsGray = false;
+        }
+
+        protected override void ProcessParts(string pixText)
+        {
+            string[] parts = pixText.Split('-');
+
+            if (parts.Length < 2)
+                return;
+
+            string dimensions = "", category = "", text = "";
+
+            if (parts[1].Equals("g"))
+            {
+                this.IsGray = true;
+
+                if (parts.Length > 2)
+                    dimensions = parts[2];
+            }
+            else
+            {
+                dimensions = parts[1];
+            }
+
+            SetDimensions(dimensions);
+
+            if (parts.Length < 3)
+                return;
+
+            if (this.IsGray)
+            {
+                category = parts[3];
+                if (parts.Length > 4)
+                {
+                    text = parts[4];
+                }
+            }
+            else
+            {
+                category = parts[2];
+                if (parts.Length > 3)
+                {
+                    text = parts[3];
+                }
+            }
+            if (_categories.Contains(category))
+            {
+                this.Category = category;
+                this.Text = text;
+            }
         }
 
         protected override void SetPath()
@@ -90,7 +83,7 @@ namespace ZenCoding
             if (this.IsGray)
                 builder.Append("g/");
 
-            builder.Append(this.AssetWidth).Append("/").Append(this.AssetHeight).Append("/");
+            builder.Append(Width % 1921).Append("/").Append(Height % 1921).Append("/");
 
             if (!String.IsNullOrEmpty(this.Category))
             {
