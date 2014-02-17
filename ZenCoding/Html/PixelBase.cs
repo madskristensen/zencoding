@@ -8,17 +8,22 @@ namespace ZenCoding
     {
         private static readonly Regex _numberExtractor = new Regex("[^\\d]", RegexOptions.Compiled);
 
-        public int AssetWidth { get; set; }
-        public int AssetHeight { get; set; }
+        protected abstract void SetPath();
+        protected abstract void Initialize();
+        protected abstract void ProcessParts(string pixText);
 
         protected PixelBase()
         {
+            Width = Height = 30;
             Initialize();
         }
 
-        protected abstract void SetPath();
-        protected abstract void Initialize();
-        public abstract void Generate(string pixText);
+        public void Generate(string pixText)
+        {
+            ProcessParts(pixText);
+            SetPath();
+            Width = Height = -1;
+        }
 
         protected void SetDimensions(string slug)
         {
@@ -29,12 +34,12 @@ namespace ZenCoding
 
             if (ValidateIntegers(dimensions))
             {
-                this.AssetWidth = int.Parse(dimensions[0], CultureInfo.CurrentCulture);
+                Width = int.Parse(dimensions[0], CultureInfo.CurrentCulture);
 
                 if (dimensions.Length == 1)
-                    this.AssetHeight = int.Parse(dimensions[0], CultureInfo.CurrentCulture);
+                    Height = int.Parse(dimensions[0], CultureInfo.CurrentCulture);
                 else
-                    this.AssetHeight = int.Parse(dimensions[1], CultureInfo.CurrentCulture);
+                    Height = int.Parse(dimensions[1], CultureInfo.CurrentCulture);
             }
         }
 

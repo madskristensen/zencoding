@@ -23,45 +23,35 @@ namespace ZenCoding
         {
             this.Foreground = "";
             this.Background = "";
-            this.AssetWidth = this.AssetHeight = 30;
             this.Format = "";
             this.Text = "";
         }
 
-        public override void Generate(string pixText)
+        protected override void ProcessParts(string pixText)
         {
-            string dimensions = "";
-            string[] parts;
+            string[] parts = pixText.Split('-');
 
-            parts = pixText == null ? new string[] { } : pixText.Trim('-').Split('-');
+            if (parts.Length < 2)
+                return;
 
-            if (parts.Length > 1)
-            {
-                dimensions = parts[1];
+            SetDimensions(parts[1]);
 
-                SetDimensions(dimensions);
+            if (parts.Length < 3)
+                return;
 
-                if (parts.Length > 2)
-                {
-                    if (_formats.Contains(parts[2]))
-                        this.Format = parts[2];
-                    else
-                        SetTextAndColors(parts[2]);
+            if (_formats.Contains(parts[2]))
+                this.Format = parts[2];
+            else
+                SetTextAndColors(parts[2]);
 
-                    if (parts.Length > 3)
-                        SetTextAndColors(parts[3]);
-                    if (parts.Length > 4)
-                        SetTextAndColors(parts[4]);
-                }
-            }
+            if (parts.Length > 3)
+                SetTextAndColors(parts[3]);
+
+            if (parts.Length > 4)
+                SetTextAndColors(parts[4]);
 
             if (pixText.Last() == '-')
                 this.Text += '-';
-
-            this.AssetWidth = this.AssetWidth % 1921;
-            this.AssetHeight = this.AssetHeight % 1921;
-
-            SetPath();
         }
 
         private void SetTextAndColors(string slug)
@@ -77,7 +67,7 @@ namespace ZenCoding
 
         protected override void SetPath()
         {
-            StringBuilder builder = new StringBuilder(_url + this.AssetWidth + "x" + this.AssetHeight + "/");
+            StringBuilder builder = new StringBuilder(_url).Append(Width % 5480).Append("x").Append(Height % 2921).Append("/");
 
             if (!String.IsNullOrEmpty(this.Format))
                 builder.Append(this.Format).Append("/");
@@ -89,7 +79,7 @@ namespace ZenCoding
                 builder.Append(this.Foreground).Append("/");
 
             if (!String.IsNullOrEmpty(this.Text))
-                builder.Append("&text=").Append(this.Text);
+                builder.Remove(builder.Length - 1, 1).Append("&text=").Append(this.Text);
 
             this.Src = builder.ToString();
         }
