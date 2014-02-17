@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Css\CssParser.cs" />
-    <Compile Include="Commons\IParser.cs" />
+    <Compile Include="Commons\IZenParser.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Html\BlockHtmlControl.cs" />
     <Compile Include="Html\CustomHtmlMeta.cs" />
@@ -73,7 +73,7 @@
     <Compile Include="Html\HtmlParser.cs" />
     <Compile Include="Html\ShortcutHelper.cs" />
     <Compile Include="Html\ValidElements.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="Commons\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
