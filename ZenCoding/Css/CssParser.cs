@@ -2,7 +2,7 @@
 
 namespace ZenCoding
 {
-    public class CssParser
+    public class CssParser : IZenParser
     {
         public string Parse(string zenSyntax)
         {

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace ZenCoding.Html
+namespace ZenCoding
 {
     public abstract class PixelBase : CustomHtmlImage
     {
@@ -11,7 +11,7 @@ namespace ZenCoding.Html
         public int AssetWidth { get; set; }
         public int AssetHeight { get; set; }
 
-        public PixelBase()
+        protected PixelBase()
         {
             Initialize();
         }
@@ -22,6 +22,9 @@ namespace ZenCoding.Html
 
         protected void SetDimensions(string slug)
         {
+            if (string.IsNullOrEmpty(slug))
+                return;
+
             var dimensions = _numberExtractor.Split(slug);
 
             if (ValidateIntegers(dimensions))
@@ -43,7 +46,7 @@ namespace ZenCoding.Html
                 {
                     Convert.ToInt32(value, CultureInfo.CurrentCulture);
                 }
-                catch
+                catch (AggregateException)
                 {
                     return false;
                 }

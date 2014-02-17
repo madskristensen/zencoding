@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using ZenCoding.Html;
 
 namespace ZenCoding
 {
@@ -34,33 +33,30 @@ namespace ZenCoding
             string dimensions = "";
             string[] parts;
 
-            parts = pixText == null ? new string[] { } : pixText.Split('-');
+            parts = pixText == null ? new string[] { } : pixText.Trim('-').Split('-');
 
-            try
+            if (parts.Length > 1)
             {
-                if (parts.Length > 1)
+                dimensions = parts[1];
+
+                SetDimensions(dimensions);
+
+                if (parts.Length > 2)
                 {
-                    dimensions = parts[1];
+                    if (_formats.Contains(parts[2]))
+                        this.Format = parts[2];
+                    else
+                        SetTextAndColors(parts[2]);
 
-                    SetDimensions(dimensions);
-
-                    if (parts.Length > 2)
-                    {
-                        if (_formats.Contains(parts[2]))
-                            this.Format = parts[2];
-                        else
-                            SetTextAndColors(parts[2]);
-
-                        if (parts.Length > 3)
-                            SetTextAndColors(parts[3]);
-
-                        if (parts.Length > 4)
-                            SetTextAndColors(parts[4]);
-                    }
+                    if (parts.Length > 3)
+                        SetTextAndColors(parts[3]);
+                    if (parts.Length > 4)
+                        SetTextAndColors(parts[4]);
                 }
             }
-            catch
-            { }
+
+            if (pixText.Last() == '-')
+                this.Text += '-';
 
             this.AssetWidth = this.AssetWidth % 1921;
             this.AssetHeight = this.AssetHeight % 1921;
@@ -71,7 +67,7 @@ namespace ZenCoding
         private void SetTextAndColors(string slug)
         {
             if (string.IsNullOrEmpty(this.Text) && slug.Contains("="))
-                this.Text = slug.Split('=')[1];
+                this.Text = string.Join("=", slug.Split('=').Skip(1));
             else if ((slug.Length == 3 || slug.Length == 6) && slug.All(c => c.IsHex()))
                 if (string.IsNullOrEmpty(this.Background))
                     this.Background = slug;

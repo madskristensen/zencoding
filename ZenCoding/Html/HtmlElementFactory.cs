@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using ZenCoding.Html;
 
 namespace ZenCoding
 {
@@ -84,6 +83,16 @@ namespace ZenCoding
             if (tagName == null)
                 return null;
 
+            HtmlControl control = TryCreateSepcialControl(tagName, type, isClone);
+
+            if (control != null)
+                return control;
+
+            return new BlockHtmlControl(tagName);
+        }
+
+        private static HtmlControl TryCreateSepcialControl(string tagName, Type type, bool isClone)
+        {
             if (tagName.StartsWith("lorem", System.StringComparison.Ordinal) ||
                 (type == typeof(LoremControl) && isClone))
             {
@@ -98,6 +107,11 @@ namespace ZenCoding
                 return new PlaceHold(tagName);
             }
 
+            return TryCreateFromStateMachine(tagName);
+        }
+
+        private static HtmlControl TryCreateFromStateMachine(string tagName)
+        {
             switch (tagName)
             {
                 case "":
@@ -267,10 +281,10 @@ namespace ZenCoding
                     return new HtmlGenericSelfClosing(tagName);
             }
 
-            return new BlockHtmlControl(tagName);
+            return null;
         }
 
-        public static Control CreateDoctypes(string part, ref List<Control> current)
+        public static Control CreateDoctypes(string part, ref IEnumerable<Control> current)
         {
             if (part == null)
                 return null;
@@ -306,7 +320,7 @@ namespace ZenCoding
                     using (HtmlControl body = HtmlElementFactory.Create("body"))
                     {
                         html.Controls.Add(body);
-                        current = new List<Control>() { body };
+                        current = new Control[] { body };
                     }
                     return root;
                 }

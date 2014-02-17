@@ -1,8 +1,9 @@
-﻿
-namespace ZenCoding
+﻿namespace ZenCoding
 {
     public class Parser
     {
+        IZenParser _parser;
+
         public string Parse(string zenSyntax, ZenType type)
         {
             if (zenSyntax == null)
@@ -11,12 +12,11 @@ namespace ZenCoding
             switch (type)
             {
                 case ZenType.HTML:
-                    HtmlParser htmlParser = new HtmlParser();
-                    return htmlParser.Parse(zenSyntax.Trim());
-
+                    this._parser = new HtmlParser();
+                    return this._parser.Parse(zenSyntax.Trim());
                 case ZenType.CSS:
-                    CssParser cssParser = new CssParser();
-                    return cssParser.Parse(zenSyntax.Trim());
+                    this._parser = new CssParser();
+                    return this._parser.Parse(zenSyntax.Trim());
             }
 
             return null;

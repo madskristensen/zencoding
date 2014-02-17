@@ -10,7 +10,7 @@ using System.Web.UI.HtmlControls;
 
 namespace ZenCoding
 {
-    public class HtmlParser
+    public class HtmlParser : IZenParser
     {
         private static char[] _attr = new[] { '#', '.', '[', '{' };
         private static char[] _elem = new[] { '>', '+', '^' };
@@ -20,25 +20,27 @@ namespace ZenCoding
 
         public static bool IsValid(string zenSyntax)
         {
-            if (zenSyntax == null || zenSyntax.Length == 0 || zenSyntax.StartsWith("asp:", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(zenSyntax) || zenSyntax.StartsWith("asp:", StringComparison.OrdinalIgnoreCase))
                 return false;
 
             int indexSpace = zenSyntax.IndexOf(' ');
+
             if (indexSpace > -1 && (indexSpace < zenSyntax.IndexOfAny(new[] { '[', '{', '"' }) || indexSpace > zenSyntax.LastIndexOfAny(new[] { ']', '}', '"' })))
                 return false;
 
-            if (zenSyntax.Contains("{") || zenSyntax.Contains("}"))
-            {
-                if (zenSyntax.Count(c => c == '{') != zenSyntax.Count(c => c == '}'))
-                    return false;
-            }
+            if ((zenSyntax.Contains("{") || zenSyntax.Contains("}")) && (zenSyntax.Count(c => c == '{') != zenSyntax.Count(c => c == '}')))
+                return false;
 
             if (zenSyntax.Contains("<") || zenSyntax.Contains("|") || zenSyntax.Contains("@"))
                 return false;
 
-            char last = zenSyntax.Last();
-            if (!char.IsLetterOrDigit(last) && last != ']' && last != '}' && last != '+' && !char.IsWhiteSpace(last))
-                return false;
+            if (!zenSyntax.StartsWith("place", StringComparison.CurrentCultureIgnoreCase))
+            {
+                char last = zenSyntax.Last();
+
+                if (!char.IsLetterOrDigit(last) && last != ']' && last != '}' && last != '+' && !char.IsWhiteSpace(last))
+                    return false;
+            }
 
             if (zenSyntax.Count(z => z == ']') != zenSyntax.Count(z => z == '['))
                 return false;
@@ -114,13 +116,13 @@ namespace ZenCoding
                 if (!IsValidHtmlElements(parts))
                     return string.Empty;
 
-                List<Control> current = new List<Control>() { root };
+                IEnumerable<Control> current = new Control[] { root };
 
                 HandleDoctypes(ref root, parts, ref current);
 
                 if (root == null) return null;
 
-                BuildControlTree(CloneStack<string>(parts), current[0], -1);
+                BuildControlTree(CloneStack<string>(parts), current.First(), -1);
 
                 return RenderControl(root);
             }
@@ -133,7 +135,7 @@ namespace ZenCoding
             }
         }
 
-        private static void HandleDoctypes(ref Control root, List<string> parts, ref List<Control> current)
+        private static void HandleDoctypes(ref Control root, List<string> parts, ref IEnumerable<Control> current)
         {
             if (parts[0] == "html:4t" || parts[0] == "html:4s" || parts[0] == "html:xt" || parts[0] == "html:xs" || parts[0] == "html:xxs" || parts[0] == "html:5")
             {
@@ -154,7 +156,7 @@ namespace ZenCoding
                     currentDefault = "span";
                 else if (i != 0 && parts[i - 1] == "table" && parts[i][0] == '>')
                     currentDefault = "tr";
-                else if (i != 0 && (parts[i - 1] == "tr" || parts[i - 1].StartsWith(">tr")) && parts[i][0] == '>')
+                else if (i != 0 && (parts[i - 1] == "tr" || parts[i - 1].StartsWith(">tr", StringComparison.CurrentCultureIgnoreCase)) && parts[i][0] == '>')
                     currentDefault = "td";
                 else if ((parts[i][0] == '>' && currentDefault == "td") || (currentDefault != "div" && parts[i][0] == '^'))
                     currentDefault = "div";
@@ -415,7 +417,7 @@ namespace ZenCoding
             int index = part.IndexOf('*');
             int count = 1;
 
-            if (index > -1 && part.Length > index && !char.IsNumber(part[index + 1]))
+            if (index > -1 && part.Length > index + 1 && !char.IsNumber(part[index + 1]))
                 index = -1;
 
             if (index > -1 && int.TryParse(part.Substring(index + 1), out count))

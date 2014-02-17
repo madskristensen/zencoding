@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using ZenCoding.Html;
 
 namespace ZenCoding
 {
@@ -26,50 +25,47 @@ namespace ZenCoding
 
             parts = pixText == null ? new string[] { } : pixText.Split('-');
 
-            try
+            if (parts.Length > 1)
             {
-                if (parts.Length > 1)
+                if (parts[1].Equals("g"))
                 {
-                    if (parts[1].Equals("g"))
-                    {
-                        this.IsGray = true;
+                    this.IsGray = true;
+
+                    if (parts.Length > 2)
                         dimensions = parts[2];
+                }
+                else
+                {
+                    dimensions = parts[1];
+                }
+
+                SetDimensions(dimensions);
+
+                if (parts.Length > 2)
+                {
+                    if (this.IsGray)
+                    {
+                        category = parts[3];
+                        if (parts.Length > 4)
+                        {
+                            text = parts[4];
+                        }
                     }
                     else
                     {
-                        dimensions = parts[1];
+                        category = parts[2];
+                        if (parts.Length > 3)
+                        {
+                            text = parts[3];
+                        }
                     }
-
-                    SetDimensions(dimensions);
-
-                    if (parts.Length > 2)
+                    if (_categories.Contains(category))
                     {
-                        if (this.IsGray)
-                        {
-                            category = parts[3];
-                            if (parts.Length > 4)
-                            {
-                                text = parts[4];
-                            }
-                        }
-                        else
-                        {
-                            category = parts[2];
-                            if (parts.Length > 3)
-                            {
-                                text = parts[3];
-                            }
-                        }
-                        if (_categories.Contains(category))
-                        {
-                            this.Category = category;
-                            this.Text = text;
-                        }
+                        this.Category = category;
+                        this.Text = text;
                     }
                 }
             }
-            catch
-            { }
 
             this.AssetWidth = this.AssetWidth % 1921;
             this.AssetHeight = this.AssetHeight % 1921;

@@ -1,5 +1,4 @@
-﻿
-namespace ZenCoding
+﻿namespace ZenCoding
 {
     public static class Extensions
     {
