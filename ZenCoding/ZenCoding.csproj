@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Css\CssParser.cs" />
+    <Compile Include="Commons\IParser.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Html\BlockHtmlControl.cs" />
     <Compile Include="Html\CustomHtmlMeta.cs" />

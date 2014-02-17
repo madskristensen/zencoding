@@ -2,7 +2,7 @@
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
-namespace ZenCoding.Html
+namespace ZenCoding
 {
     public class CustomHtmlAnchor : HtmlAnchor
     {
