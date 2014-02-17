@@ -93,6 +93,10 @@ namespace ZenCoding
             {
                 return new LoremPixel(tagName);
             }
+            else if (tagName.StartsWith("place", System.StringComparison.Ordinal))
+            {
+                return new PlaceHold(tagName);
+            }
 
             switch (tagName)
             {

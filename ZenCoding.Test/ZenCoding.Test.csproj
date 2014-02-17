@@ -63,6 +63,7 @@
     <Compile Include="Html\Formatting.cs" />
     <Compile Include="Html\Grouping.cs" />
     <Compile Include="Html\InnerText.cs" />
+    <Compile Include="Html\PlaceHold.cs" />
     <Compile Include="Html\LoremPixel.cs" />
     <Compile Include="Html\Plus.cs" />
     <Compile Include="Html\Shortcut.cs" />
