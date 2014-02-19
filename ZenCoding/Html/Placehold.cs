@@ -44,11 +44,8 @@ namespace ZenCoding
             else
                 SetTextAndColors(parts[2]);
 
-            if (parts.Length > 3)
-                SetTextAndColors(parts[3]);
-
-            if (parts.Length > 4)
-                SetTextAndColors(parts[4]);
+            for (var i = 3; i < parts.Length; ++i)
+                SetTextAndColors(parts[i]);
 
             if (pixText.Last() == '-')
                 this.Text += '-';

@@ -37,7 +37,7 @@ namespace ZenCoding
                 Width = int.Parse(dimensions[0], CultureInfo.CurrentCulture);
 
                 if (dimensions.Length == 1)
-                    Height = int.Parse(dimensions[0], CultureInfo.CurrentCulture);
+                    Height = Width;
                 else
                     Height = int.Parse(dimensions[1], CultureInfo.CurrentCulture);
             }

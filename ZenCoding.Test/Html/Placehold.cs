@@ -43,9 +43,9 @@ namespace ZenCoding.Test
         [TestMethod]
         public void PlaceHoldColors()
         {
-            string result = _parser.Parse("place-999x1920-EEE-FFFFFF-t=Some%20Random%20Text!", ZenType.HTML);
+            string result = _parser.Parse("place-150x240-jpeg-EEEDDD-888222-t=This%20is%20some%20text!", ZenType.HTML);
 
-            string expected = "http://placehold.it/999x1920/EEE/FFFFFF&text=Some%20Random%20Text!";
+            string expected = "http://placehold.it/150x240/jpeg/EEEDDD/888222&text=This%20is%20some%20text!";
 
             StringAssert.Contains(result, expected);
         }
