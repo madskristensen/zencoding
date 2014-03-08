@@ -36,17 +36,18 @@ namespace ZenCoding
                     control.ID = element.ID.Increment(count);
                 }
 
-                if (element.Controls.Count == 1)
-                {
-                    LiteralControl literal = element.Controls[0] as LiteralControl;
-                    if (literal != null)
-                        control.Controls.Add(new LiteralControl(literal.Text.Increment(count)));
-                }
-
                 var lorem = element as LoremControl;
+
                 if (lorem != null)
                 {
-                    lorem.InnerText = lorem.Generate(count);
+                    (control as LoremControl).InnerText = lorem.Generate(count);
+                }
+                else if (element.Controls.Count == 1)
+                {
+                    LiteralControl literal = element.Controls[0] as LiteralControl;
+
+                    if (literal != null)
+                        control.Controls.Add(new LiteralControl(literal.Text.Increment(count)));
                 }
 
                 return control;

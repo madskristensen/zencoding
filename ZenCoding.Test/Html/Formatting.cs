@@ -79,5 +79,31 @@ namespace ZenCoding.Test
             Assert.AreEqual(expected, result);
         }
 
+        [TestMethod]
+        public void Formatting7()
+        {
+            string result = _parser.Parse("ul>li*3>{some text}", ZenType.HTML);
+            string expected = "<ul>" +
+                    Environment.NewLine + "<li>some text</li>" +
+                    Environment.NewLine + "<li>some text</li>" +
+                    Environment.NewLine + "<li>some text</li>" +
+                    Environment.NewLine + "</ul>";
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void Formatting8()
+        {
+            string result = _parser.Parse("ul>li*3>lorem", ZenType.HTML);
+            string expected = "<ul>" +
+                    Environment.NewLine + "<li>random lorem text</li>" +
+                    Environment.NewLine + "<li>random lorem text</li>" +
+                    Environment.NewLine + "<li>random lorem text</li>" +
+                    Environment.NewLine + "</ul>";
+
+            Assert.AreEqual(expected.Split(Environment.NewLine.ToCharArray()).Length, result.Split(Environment.NewLine.ToCharArray()).Length);
+        }
+
     }
 }

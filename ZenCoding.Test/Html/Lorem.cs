@@ -18,9 +18,8 @@ namespace ZenCoding.Test
         public void Lorem1()
         {
             string result = _parser.Parse("lorem", ZenType.HTML);
-            string expected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit fusce vel sapien elit in malesuada semper mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.";
 
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(result.Split().Length, 30);
         }
 
         [TestMethod]
@@ -28,25 +27,31 @@ namespace ZenCoding.Test
         {
             string result = _parser.Parse("lorem*3", ZenType.HTML);
 
-            Assert.AreEqual(result.Split(new string[] { Environment.NewLine }, StringSplitOptions.None).Length, 3);
+            Assert.AreEqual(result.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length, 3);
         }
 
         [TestMethod]
         public void Lorem3()
         {
             string result = _parser.Parse("p>lorem", ZenType.HTML);
-            string expected = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit fusce vel sapien elit in malesuada semper mi, id sollicitudin urna fermentum ut fusce varius nisl ac ipsum gravida vel pretium tellus.</p>";
 
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, ""));
+            Assert.AreEqual(result.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length, 1);
         }
 
         [TestMethod]
         public void LoremCount()
         {
             string result = _parser.Parse("p>lorem10", ZenType.HTML);
-            string expected = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit fusce vel.</p>";
 
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, ""));
+            Assert.AreEqual(result.Split().Length, 10);
+        }
+
+        [TestMethod]
+        public void LoremWithText()
+        {
+            string result = _parser.Parse("div>lorem+{some text}", ZenType.HTML);
+
+            Assert.AreEqual(result.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length, 4);
         }
 
         [TestMethod]
