@@ -154,7 +154,7 @@ namespace ZenCoding
 
                 case "abbr":
                 case "acronym":
-                    using (HtmlGenericControl abbr = new HtmlGenericControl("acronym"))
+                    using (HtmlGenericControl abbr = new HtmlGenericControl(tagName))
                     {
                         abbr.Attributes["title"] = string.Empty;
                         return abbr;
