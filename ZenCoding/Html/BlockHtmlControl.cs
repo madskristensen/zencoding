@@ -8,7 +8,7 @@ namespace ZenCoding
     {
         public BlockHtmlControl(string tagName)
         {
-            TagName = tagName;
+            TagName = tagName.Replace("!", "");
         }
 
         protected override void RenderBeginTag(HtmlTextWriter writer)
