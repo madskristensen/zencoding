@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace ZenCoding.Test
 {
@@ -101,6 +102,14 @@ namespace ZenCoding.Test
             string expected = "<input type=\"button\" value=\"\" />";
 
             Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void CustomElement()
+        {
+            string result = _parser.Parse("!ion-ico", ZenType.HTML);
+            Assert.AreEqual("<ion-ico></ion-ico>", result.Replace(Environment.NewLine, string.Empty));
+
         }
 
         [TestMethod]

@@ -192,7 +192,8 @@ namespace ZenCoding
                     !firstElement.StartsWith("lorem", StringComparison.Ordinal) &&
                     !firstElement.StartsWith("pix", StringComparison.Ordinal) &&
                     !firstElement.StartsWith("place", StringComparison.Ordinal) &&
-                    firstElement != "h$")
+                    firstElement != "h$"
+                    && !firstElement.StartsWith("!", StringComparison.Ordinal))
 
                     return false;
             }

@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using ZenParser = ZenCoding.HtmlParser;
 
 namespace ZenCoding.Test
@@ -31,6 +31,7 @@ namespace ZenCoding.Test
             Assert.IsFalse(ZenParser.IsValid("div[text]]>div"));
             Assert.IsFalse(ZenParser.IsValid("asp:literal"));
             Assert.IsFalse(ZenParser.IsValid("ASP:LITERAL"));
+            Assert.IsTrue(ZenParser.IsValid("!ion-list"));
         }
 
         [TestMethod]
