@@ -90,5 +90,18 @@ namespace ZenCoding.Test
 
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }
+
+        [TestMethod]
+        public void TestHtml5AllowedTags()
+        {
+            string result = _parser.Parse("main#mainArea>section.search+section.results+h1-alternative[--data-breach=somevalue]", ZenType.HTML);
+            string expected = "<main id=\"mainArea\">" +
+                              "<section class=\"search\"></section>" +
+                              "<section class=\"results\"></section>" +
+                              "<h1-alternative --data-breach=\"somevalue\"></h1-alternative>" +
+                              "</main>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
     }
 }
