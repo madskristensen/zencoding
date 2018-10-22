@@ -41,23 +41,5 @@ namespace ZenCoding.Test
 
             Assert.AreEqual(string.Empty, result);
         }
-
-        [TestMethod]
-        public void ValidateHtmlElements()
-        {
-            string result = _parser.Parse("for", ZenType.HTML);
-            string expected = "";
-
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
-        }
-
-        [TestMethod]
-        public void ValidateMultipleHtmlElements()
-        {
-            string result = _parser.Parse("div>for", ZenType.HTML);
-            string expected = "";
-
-            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
-        }
     }
 }
