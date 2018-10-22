@@ -187,13 +187,15 @@ namespace ZenCoding
                     firstElement += c;
                 }
 
+                var tagRegex = new Regex(@"[a-z]+[a-z0-9]*[\-a-z0-9]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 if (firstElement.Length > 0 &&
+                    !(tagRegex.Matches(firstElement).Count == 1) &&
                     !ValidElements.List.Contains(firstElement) &&
                     !firstElement.StartsWith("lorem", StringComparison.Ordinal) &&
                     !firstElement.StartsWith("pix", StringComparison.Ordinal) &&
                     !firstElement.StartsWith("place", StringComparison.Ordinal) &&
-                    firstElement != "h$"
-                    && !firstElement.StartsWith("!", StringComparison.Ordinal))
+                    firstElement != "h$" &&
+                    !firstElement.StartsWith("!", StringComparison.Ordinal))
 
                     return false;
             }
