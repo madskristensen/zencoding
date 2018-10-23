@@ -103,5 +103,89 @@ namespace ZenCoding.Test
 
             Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
         }
+
+
+        [TestMethod]
+        public void TestExtendAllTags_1()
+        {
+            string result = _parser.Parse("p>input", ZenType.HTML);
+            string expected = "<p>" +
+                              "<input type=\"\" value=\"\" />" +
+                              "</p>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
+        [TestMethod]
+        public void TestExtendAllTags_2()
+        {
+            string result = _parser.Parse("tr>th", ZenType.HTML);
+            string expected = "<tr>" +
+                              "<th></th>" +
+                              "</tr>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
+        [TestMethod]
+        public void TestExtendAllAttributes_1()
+        {
+            string result = _parser.Parse("div.ui.content", ZenType.HTML);
+            string expected = "<div class=\"ui content\"></div>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
+        [TestMethod]
+        public void TestExtendAllAttributes_2()
+        {
+            string result = _parser.Parse(".ui.primary.button", ZenType.HTML);
+            string expected = "<div class=\"ui primary button\"></div>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
+        [TestMethod]
+        public void TestExtendAllAttributes_3()
+        {
+            string result = _parser.Parse("#foo>span", ZenType.HTML);
+            string expected = "<div id=\"foo\">" +
+                              "<span></span>" +
+                              "</div>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
+        [TestMethod]
+        public void TestExoticExpansion_1()
+        {
+            string result = _parser.Parse("(#main^#header^#div^#map)", ZenType.HTML);
+            string expected = "<div id=\"main\"></div>" +
+                              "<div id=\"header\"></div>" +
+                              "<div id=\"div\"></div>" +
+                              "<div id=\"map\"></div>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
+        [TestMethod]
+        public void TestExoticExpansion_2()
+        {
+            string result = _parser.Parse("(#header>ul#menu>li*6>a)+#main", ZenType.HTML);
+            string expected = "<div id=\"header\">" +
+                              "<ul id=\"menu\">" +
+                              "<li><a href=\"\"></a></li>" +
+                              "<li><a href=\"\"></a></li>" +
+                              "<li><a href=\"\"></a></li>" +
+                              "<li><a href=\"\"></a></li>" +
+                              "<li><a href=\"\"></a></li>" +
+                              "<li><a href=\"\"></a></li>" +
+                              "</ul>" +
+                              "</div>" +
+                              "<div id=\"main\"></div>";
+
+            Assert.AreEqual(expected, result.Replace(Environment.NewLine, string.Empty));
+        }
+
     }
 }
